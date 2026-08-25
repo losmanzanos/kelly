@@ -227,8 +227,8 @@ pages.push({
     <div class="wrap narrow stack">
       <h2>Kelly Faus, MA, LPC, LAC</h2>
       <p class="lede">
-        I&rsquo;m an addiction and mental health counselor licensed in Colorado, and a Certified
-        Addiction Specialist. I work with adolescents and adults on substance use, grief, depression,
+        I&rsquo;m an addiction and mental health counselor licensed in Colorado as both a
+        Licensed Professional Counselor (LPC) and a Licensed Addiction Counselor (LAC). I work with adolescents and adults on substance use, grief, depression,
         anxiety, trauma, anger, and codependency.
       </p>
       <p>
