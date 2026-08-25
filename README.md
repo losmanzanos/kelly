@@ -68,6 +68,7 @@ siblings and add them as `image-set()` fallbacks.
   put clinical detail in it, but worth a conversation about a secure intake link instead.
 - **Scheduling buttons.** All point at `contact.html`. If he uses SonderMind or another
   booking link, swap the hrefs.
+- **Credentials.** LAC = Licensed Addiction Counselor; "Certified Addiction Specialist" removed sitewide.
 - **Pronouns.** Everything uses he/him, consistent with the original bio.
 - **Asset licensing.** The couch and texture images came from the template build — worth
   confirming with Kelly's sister that they're licensed for the live site, not comps.

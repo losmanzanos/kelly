@@ -150,7 +150,7 @@ pages.push({
       <div class="framed">
         <p class="eyebrow">Meet your counselor</p>
         <h2>Kelly Faus</h2>
-        <p style="font-style:italic;margin-bottom:1.5rem">MA, LPC, LAC &middot; Certified Addiction Specialist</p>
+        <p style="font-style:italic;margin-bottom:1.5rem">MA &middot; Licensed Professional Counselor &middot; Licensed Addiction Counselor</p>
         <p>
           I&rsquo;m an addiction and mental health counselor working with adolescents and adults
           across Colorado. Much of my work is with people navigating substance use, grief, depression,
@@ -267,7 +267,6 @@ pages.push({
         <li>MA, Clinical Mental Health Counseling</li>
         <li>Licensed Professional Counselor (LPC), Colorado</li>
         <li>Licensed Addiction Counselor (LAC), Colorado</li>
-        <li>Certified Addiction Specialist</li>
         <li>Gottman method training, couples therapy</li>
       </ul>
       <p class="callout" style="margin-top:2rem">
