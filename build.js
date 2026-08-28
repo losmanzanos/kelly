@@ -19,6 +19,7 @@ const NAV = [
   ['about.html',     'About'],
   ['services.html',  'Services'],
   ['documents.html', 'Documents'],
+  ['safety-plan.html', 'Safety Plan'],
   ['resources.html', 'Resources'],
   ['contact.html',   'Contact'],
 ];
@@ -140,7 +141,7 @@ pages.push({
       <div class="grid grid--3" style="margin-top:1.5rem">
         <div><h3>Licensed statewide</h3><p>LPC and LAC in Colorado, seeing clients from Denver to the Western Slope.</p></div>
         <div><h3>Private and secure</h3><p>Sessions run on Zoom for Healthcare. No commute, no waiting room.</p></div>
-        <div><h3>Insurance or private pay</h3><p>In-network through SonderMind, Medicaid through Colorado Access, or straightforward self-pay.</p></div>
+        <div><h3>Insurance or private pay</h3><p>Medicaid through Colorado Access, straightforward self-pay, or ask about current network participation.</p></div>
       </div>
     </div>
   </section>
@@ -158,9 +159,9 @@ pages.push({
           that&rsquo;s how life tends to arrive.
         </p>
         <p>
-          I trained at Adams State University and the University of Northern Colorado, and I&rsquo;m
-          trained in the Gottman method for couples work. Alongside this practice I serve as a therapist
-          with Ascent Clinical Services, Hazelbrook Sober Living, and Compassionate Care Counseling LLC.
+          I trained at Adams State University and the University of Northern Colorado. Alongside this
+          practice I serve as Clinical Director at Denver Recovery Solutions and as a supervisor with
+          Lost and Found Behavioral Wellness.
         </p>
         <p style="margin-top:1.5rem"><a href="about.html">More about my background and approach &rarr;</a></p>
       </div>
@@ -190,11 +191,11 @@ pages.push({
           <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
         </article>
         <article class="framed service">
-          <h3>Couples Counseling</h3>
-          <div class="price">$150</div>
-          <p class="meta">60 minute session</p>
-          <p class="desc">Gottman-method work for partners rebuilding trust, communication, and connection &mdash; including couples in recovery.</p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
+          <h3>Clinical Supervision</h3>
+          <div class="price" style="font-size:clamp(1.5rem,2.6vw,1.875rem);font-style:italic">Rate on request</div>
+          <p class="meta">Individual or group</p>
+          <p class="desc">Supervision for graduate interns, pre-licensed professionals, and peer recovery coaches, including CAC Core Curriculum credit.</p>
+          <a class="btn btn--outline" href="contact.html">Inquire</a>
         </article>
       </div>
       <p style="margin-top:2.5rem"><a href="services.html">See full service details, rates, and insurance &rarr;</a></p>
@@ -239,9 +240,9 @@ pages.push({
       </p>
       <p>
         I hold a master&rsquo;s degree in Clinical Mental Health Counseling and studied at Adams State
-        University and the University of Northern Colorado. I&rsquo;m trained in the Gottman method for
-        couples therapy. Alongside Cool Bird Counseling, I work as a therapist with Ascent Clinical
-        Services, Hazelbrook Sober Living, and Compassionate Care Counseling LLC.
+        University and the University of Northern Colorado. Alongside Cool Bird Counseling, I serve as
+        Clinical Director at Denver Recovery Solutions and as a supervisor with Lost and Found
+        Behavioral Wellness.
       </p>
 
       <h3 style="margin-top:2.5rem">How I work</h3>
@@ -258,7 +259,6 @@ pages.push({
         <li>People in early recovery, and people who aren&rsquo;t sure recovery is the word yet</li>
         <li>Grief and bereavement, including loss to overdose or suicide</li>
         <li>Depression, anxiety, trauma, anger, and codependency</li>
-        <li>Couples rebuilding communication and trust</li>
         <li>Graduate interns and pre-licensed clinicians seeking supervision</li>
       </ul>
 
@@ -267,7 +267,7 @@ pages.push({
         <li>MA, Clinical Mental Health Counseling</li>
         <li>Licensed Professional Counselor (LPC), Colorado</li>
         <li>Licensed Addiction Counselor (LAC), Colorado</li>
-        <li>Gottman method training, couples therapy</li>
+        <li>Gottman Method training, Levels 1 &amp; 2</li>
       </ul>
       <p class="callout" style="margin-top:2rem">
         <strong>Verify a license.</strong> Colorado license numbers can be looked up through the
@@ -285,7 +285,7 @@ ${contactForm('Ready when you are', 'Reach out for a confidential consultation &
 pages.push({
   file: 'services.html',
   title: 'Services & Rates | Cool Bird Counseling, Colorado',
-  description: 'Individual psychotherapy, substance use and mental health assessment, couples counseling, and clinical supervision. Telehealth across Colorado. Insurance and private pay options.',
+  description: 'Individual psychotherapy, substance use and mental health assessment, and clinical supervision. Telehealth across Colorado. Insurance and private pay options.',
   body: `
   <section class="page-head wrap">
     <p class="eyebrow">Services</p>
@@ -295,7 +295,7 @@ pages.push({
 
   <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="grid grid--2">
+      <div class="grid grid--3">
 
         <article class="framed service">
           <h3>Individual Psychotherapy</h3>
@@ -323,17 +323,6 @@ pages.push({
           <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
         </article>
 
-        <article class="framed service">
-          <h3>Couples Counseling</h3>
-          <div class="price">$150</div>
-          <p class="meta">60 minute session</p>
-          <p class="desc">
-            Gottman-method couples work for partners rebuilding communication, trust, and connection.
-            Especially useful for couples where one or both partners are in recovery, where a betrayal
-            needs repair, or where the same argument keeps arriving in different costumes.
-          </p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
-        </article>
 
         <article class="framed service">
           <h3>Clinical Supervision</h3>
@@ -360,9 +349,9 @@ pages.push({
         about your care is reported to a third party.
       </p>
       <p>
-        <strong>Commercial insurance.</strong> I&rsquo;m in network through SonderMind, which contracts
-        with most major Colorado plans. SonderMind verifies your benefits before the first session so you
-        know your cost up front.
+        <strong>Commercial insurance.</strong> Network participation changes from time to time &mdash;
+        reach out and I&rsquo;ll tell you exactly where things stand and what your cost would be before
+        we book anything.
       </p>
       <p>
         <strong>Medicaid.</strong> Health First Colorado members are accepted through Colorado Access.
@@ -400,84 +389,57 @@ ${contactForm('Book a consultation', 'Same-week openings are available. Tell me 
 pages.push({
   file: 'documents.html',
   title: 'Client Documents & Forms | Cool Bird Counseling',
-  description: 'Intake paperwork, informed consent, telehealth consent, privacy practices, and release of information forms for Cool Bird Counseling clients in Colorado.',
+  description: 'HIPAA Notice of Privacy Practices, release of information form, and Good Faith Estimate information for Cool Bird Counseling clients in Colorado.',
   body: `
   <section class="page-head wrap">
     <p class="eyebrow">Documents</p>
     <h1>Paperwork, handled before we meet.</h1>
-    <p class="lede">Everything you&rsquo;ll be asked to sign is here, so you can read it on your own time rather than skimming it five minutes before a session.</p>
+    <p class="lede">A few documents you can read on your own time. The rest of your paperwork comes to you directly, so nothing sensitive sits on a public page.</p>
   </section>
 
   <section class="section" style="padding-top:0">
     <div class="wrap narrow">
       <div class="framed">
-        <h2 style="font-size:1.375rem">New client packet</h2>
-        <p style="font-size:.9375rem;margin-bottom:2rem">
-          After our consultation you&rsquo;ll receive a secure link to complete these electronically.
-          Copies are posted here for reference.
+        <h2 style="font-size:1.375rem">Client documents</h2>        <p style="font-size:.9375rem;margin-bottom:2rem">
+          These are the documents available to download directly. Everything else in your client
+          paperwork is delivered to you privately rather than posted publicly.
         </p>
 
         <div class="doc-row">
           <div class="doc-row__text">
-            <strong>Client Intake Form</strong>
-            <span>Contact details, history, current concerns, and goals for counseling.</span>
-          </div>
-          <span class="tag">Coming soon</span>
-        </div>
-
-        <div class="doc-row">
-          <div class="doc-row__text">
-            <strong>Informed Consent for Treatment</strong>
-            <span>What counseling involves, your rights as a client, and the limits of confidentiality.</span>
-          </div>
-          <span class="tag">Coming soon</span>
-        </div>
-
-        <div class="doc-row">
-          <div class="doc-row__text">
-            <strong>Telehealth Consent</strong>
-            <span>How virtual sessions work, technology requirements, and safety planning.</span>
-          </div>
-          <span class="tag">Coming soon</span>
-        </div>
-
-        <div class="doc-row">
-          <div class="doc-row__text">
             <strong>Notice of Privacy Practices (HIPAA)</strong>
-            <span>How your protected health information is used, stored, and safeguarded.</span>
+            <span>How your protected health information is used, stored, and safeguarded, and your rights regarding it.</span>
           </div>
-          <span class="tag">Coming soon</span>
-        </div>
-
-        <div class="doc-row">
-          <div class="doc-row__text">
-            <strong>Practice Policies &amp; Fee Agreement</strong>
-            <span>Scheduling, cancellations, payment, communication, and after-hours contact.</span>
-          </div>
-          <span class="tag">Coming soon</span>
+          <a class="tag" href="assets/cool-bird-hipaa-notice.pdf" target="_blank" rel="noopener">Download PDF</a>
         </div>
 
         <div class="doc-row">
           <div class="doc-row__text">
             <strong>Authorization to Release Information</strong>
-            <span>Use this to authorize communication with a physician, attorney, or treatment program.</span>
+            <span>Use this to authorize communication with a physician, attorney, treatment program, or family member.</span>
           </div>
-          <span class="tag">Coming soon</span>
+          <a class="tag" href="assets/cool-bird-roi.pdf" target="_blank" rel="noopener">Download PDF</a>
         </div>
 
         <div class="doc-row" style="border-bottom:0">
           <div class="doc-row__text">
-            <strong>Good Faith Estimate</strong>
-            <span>Written cost estimate for clients not using insurance, per the No Surprises Act.</span>
+            <strong>Safety Plan</strong>
+            <span>An interactive tool for building a personal safety plan you can print or save.</span>
           </div>
-          <span class="tag">On request</span>
+          <a class="tag" href="safety-plan.html">Open generator</a>
         </div>
+
       </div>
 
       <p class="callout" style="margin-top:2.5rem">
-        <strong>Please don&rsquo;t email completed forms.</strong> Standard email isn&rsquo;t a secure
-        channel for health information. Use the secure link you&rsquo;re sent, or bring questions to
-        your consultation.
+        <strong>Good Faith Estimate.</strong> Under the No Surprises Act, clients who are uninsured or
+        not using insurance have the right to a written estimate of expected costs before care begins.
+        A Good Faith Estimate is provided to qualifying clients, and to anyone else on request &mdash;
+        just ask.
+      </p>
+      <p class="callout" style="margin-top:1.25rem">
+        <strong>Intake paperwork.</strong> Your intake forms, informed consent, telehealth consent, and
+        practice policies are sent to you directly before the first session rather than hosted here.
       </p>
     </div>
   </section>
@@ -549,10 +511,6 @@ pages.push({
       <h2 style="margin-top:3.5rem">Coverage &amp; access</h2>
       <ul class="resource-list">
         <li>
-          <strong>SonderMind</strong>
-          <span>Benefit verification and in-network scheduling for most major Colorado commercial plans.</span>
-        </li>
-        <li>
           <strong>Colorado Access</strong>
           <span>Behavioral health coverage for Health First Colorado (Medicaid) members.</span>
         </li>
@@ -571,10 +529,6 @@ pages.push({
         <li>
           <strong>NAMI Colorado</strong>
           <span>Free education, support groups, and advocacy for individuals and families at <a href="https://namicolorado.org/">namicolorado.org</a>.</span>
-        </li>
-        <li>
-          <strong>The Gottman Institute</strong>
-          <span>Research-backed articles and self-guided tools for couples at <a href="https://www.gottman.com/">gottman.com</a>.</span>
         </li>
         <li>
           <strong>Judi&rsquo;s House</strong>
@@ -607,7 +561,7 @@ pages.push({
 
   <section class="section" style="padding-top:0">
     <div class="wrap">
-      <div class="grid grid--2">
+      <div class="grid grid--3">
         <div class="framed stack">
           <h3>Reach me directly</h3>
           <p>
@@ -652,6 +606,220 @@ ${contactForm('Start your journey today', 'Your privacy and safety are my top co
       </div>
     </div>
   </section>
+`,
+});
+
+
+/* ============================ SAFETY PLAN =============================== */
+pages.push({
+  file: 'safety-plan.html',
+  title: 'Safety Plan Generator | Cool Bird Counseling',
+  description: 'Learn what a safety plan is and build your own printable crisis safety plan — warning signs, coping strategies, social supports, and crisis contacts.',
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow">Safety Plan</p>
+    <h1>A plan made calm, for a moment that isn&rsquo;t.</h1>
+    <p class="lede">Read through the guide below, then build your own printable safety plan at the bottom of the page.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow stack">
+      <h2>What is a safety plan?</h2>
+      <p>
+        A safety plan is a list of warning signs, coping strategies, trusted people, and other
+        resources that can be helpful to you when you are in a state of crisis. Experiencing a state
+        of crisis &mdash; suicidal ideation, homicidal ideation, desire to self-harm, or other
+        stressful situations &mdash; can distort your ability to think clearly. Creating a safety plan
+        during a time when you are calm and collected gives you a quick reference for times when you
+        are feeling distressed. Feel free to create a safety plan yourself, or find a mental health
+        professional for help.
+      </p>
+
+      <h3 style="margin-top:2.5rem">Warning signs</h3>
+      <p>
+        Warning signs are thoughts, feelings, or behaviors that indicate you may be in or heading
+        toward a crisis. It is important to know your warning signs, so you can recognize when it is
+        time to use coping skills or other resources from your safety plan.
+      </p>
+      <p>
+        Some common warning signs might include: isolation or social withdrawal, suicidal thoughts,
+        homicidal thoughts, rage, using or desiring to use substances, self-harm or desiring to
+        self-harm, sadness, betrayal, dissociation, anxiety or panic, thinking &ldquo;I am a
+        burden,&rdquo; feelings of hopelessness, thinking &ldquo;I am better off dead,&rdquo; feelings
+        of hate, pacing, lack of sleep, too much sleep, changes in appetite, talking more or less,
+        shouting or swearing, feeling suspicious or paranoid, and more.
+      </p>
+      <p><em>Which of these might pertain to you in particular? Can you think of any others that weren&rsquo;t listed?</em></p>
+
+      <h3 style="margin-top:2.5rem">Coping strategies</h3>
+      <p>
+        Coping skills are techniques you can use all by yourself to regulate your emotions or distract
+        yourself from whatever is distressing you.
+      </p>
+      <p>
+        Some examples include: grounding strategies, taking a walk, exercising, watching TV or a
+        movie, listening to music, meditating, yoga, petting an animal, taking a nap, taking a bath or
+        shower, lighting candles or incense or using scented oils, making a meal, reading, or engaging
+        in a hobby.
+      </p>
+      <p><em>What is a coping skill that is useful to you that isn&rsquo;t listed?</em></p>
+
+      <h3 style="margin-top:2.5rem">Social support</h3>
+      <p>
+        Trusted people whom you can call for support are important to list on a safety plan. Asking
+        for help can feel uncomfortable for some, but it is a helpful way to navigate a challenging
+        time. Trusted social supports could be friends, family members, members of a religious
+        community, coaches, or other close relationships.
+      </p>
+      <p><em>Who are some people in your life in whom you would be willing to confide if you needed support?</em> Include their names and contact information on your plan.</p>
+
+      <h3 style="margin-top:2.5rem">Future focus</h3>
+      <p>
+        It can be helpful to list something you are looking forward to, or something that makes life
+        worth living. These reminders can be reassuring during a crisis state.
+      </p>
+      <p>
+        It is also helpful to brainstorm ways you can keep yourself safe until the crisis passes. Do
+        you have any weapons at home that could be stored elsewhere temporarily? What about
+        medications or chemicals? Planning for how to keep your environment safe during a crisis is
+        crucial.
+      </p>
+      <p><strong>Remember, our emotional states are temporary, and they will pass.</strong></p>
+
+      <h3 style="margin-top:2.5rem">Crisis services</h3>
+      <p>
+        There are many professional resources available to help navigate a crisis. Make sure you have
+        information for contacting your mental health professional on your safety plan. In Colorado,
+        you can call or text <a href="tel:988">988</a> to reach the Colorado Mental Health Line, and
+        there are several in-person, walk-in crisis centers across the state, as well as your local
+        emergency room. Names, addresses, and phone numbers for each of these resources, including
+        in-person resources nearest you, are important to include on your safety plan.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--topo" id="generator">
+    <div class="wrap narrow">
+      <div class="framed">
+        <p class="eyebrow">Safety Plan Generator</p>
+        <h2 style="margin-bottom:.4em">Build your plan</h2>
+        <p style="font-size:.9375rem">
+          Fill in whatever fits. When you&rsquo;re done, print it &mdash; choose &ldquo;Save as
+          PDF&rdquo; in the print dialog to keep a copy, or print it on paper and put it somewhere you
+          will actually see it.
+        </p>
+        <p class="callout" style="margin:1.5rem 0 2rem">
+          <strong>Nothing you type here is saved or sent anywhere.</strong> It stays in your browser
+          for as long as this page is open, and disappears when you close it. Print your plan before
+          you leave the page.
+        </p>
+
+        <form id="sp" class="sp">
+          <label>Warning signs &mdash; thoughts, feelings, or behaviors that tell me a crisis may be coming
+            <textarea name="warning" rows="4" placeholder="e.g. pulling away from friends, not sleeping, thinking I'm a burden"></textarea></label>
+
+          <label>Coping strategies I can use on my own
+            <textarea name="coping" rows="4" placeholder="e.g. walk the dog, call my sister, shower, 5-4-3-2-1 grounding"></textarea></label>
+
+          <label>People I can reach out to &mdash; names and phone numbers
+            <textarea name="support" rows="4" placeholder="e.g. Sam — (303) 555-0143"></textarea></label>
+
+          <label>Reasons for living, and things I&rsquo;m looking forward to
+            <textarea name="future" rows="3" placeholder="e.g. my daughter's graduation in May"></textarea></label>
+
+          <label>Making my environment safer &mdash; what I&rsquo;ll move, store, or ask someone to hold
+            <textarea name="environment" rows="3" placeholder="e.g. ask Dad to hold the firearm; give medications to my roommate"></textarea></label>
+
+          <label>My mental health professional
+            <input type="text" name="clinician" placeholder="Name and phone number"></label>
+
+          <label>Other crisis contacts near me
+            <textarea name="crisis" rows="3" placeholder="Local walk-in center, nearest emergency room, anyone else"></textarea></label>
+
+          <div class="sp__actions">
+            <button type="button" class="btn btn--solid" onclick="buildPlan()">Create my plan</button>
+            <button type="button" class="btn btn--outline" onclick="buildPlan(); window.print();">Print / Save as PDF</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="plan" class="framed plan" hidden>
+        <h2 class="plan__title">My Safety Plan</h2>
+        <div id="planBody"></div>
+        <p class="plan__crisis">
+          <strong>In Colorado, call or text 988</strong> to reach the Suicide &amp; Crisis Lifeline,
+          any hour of the day. If you are in immediate danger, call 911.
+        </p>
+        <p class="plan__foot">Cool Bird Counseling LLC &middot; kelly@coolbirdcounseling.com &middot; (303) 351-1068</p>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .sp label { display:block; font-family:var(--sans); font-size:.875rem; font-weight:500;
+                color:var(--ink); margin-bottom:1.5rem; }
+    .sp textarea, .sp input { display:block; width:100%; margin-top:.5rem; background:var(--cream);
+                border:1px solid var(--rule); border-radius:0; padding:.75rem .9rem;
+                font-family:var(--serif); font-size:1rem; color:var(--ink); resize:vertical; }
+    .sp textarea:focus, .sp input:focus { outline:none; border-color:var(--sage); background:#fff; }
+    .sp__actions { display:flex; flex-wrap:wrap; gap:.75rem; }
+    .plan { margin-top:2rem; }
+    .plan__title { font-style:italic; text-align:center; }
+    .plan h3 { font-family:var(--sans); font-size:.75rem; letter-spacing:.16em; text-transform:uppercase;
+               color:var(--sage); margin:1.75rem 0 .4rem; }
+    .plan p.v { white-space:pre-wrap; margin:0; }
+    .plan__crisis { margin-top:2rem; padding-top:1.25rem; border-top:1px solid var(--rule); font-size:.9375rem; }
+    .plan__foot { font-size:.8125rem; color:#6d726d; text-align:center; margin-top:1rem; }
+    @media print {
+      @page { margin: 0.75in; }
+      /* #plan is relocated to a direct child of <body> before printing, so
+         everything else can be display:none and the flow collapses to one page. */
+      body > *:not(#plan) { display: none !important; }
+      html, body { height: auto !important; background: #fff !important; }
+      #plan { display: block !important; margin: 0 !important; padding: 0 !important;
+              border: 0 !important; background: #fff !important; }
+      #plan::before { display: none !important; }
+      #plan h3 { break-after: avoid; }
+      #plan p.v { break-inside: avoid; }
+    }
+  </style>
+
+  <script>
+    function buildPlan() {
+      var f = document.getElementById('sp');
+      var map = [
+        ['warning', 'Warning signs'],
+        ['coping', 'Coping strategies'],
+        ['support', 'People I can reach out to'],
+        ['future', 'Reasons for living'],
+        ['environment', 'Making my environment safer'],
+        ['clinician', 'My mental health professional'],
+        ['crisis', 'Other crisis contacts']
+      ];
+      var html = '';
+      map.forEach(function (pair) {
+        var v = (f.elements[pair[0]].value || '').trim();
+        if (!v) return;
+        var esc = v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        html += '<h3>' + pair[1] + '</h3><p class="v">' + esc + '</p>';
+      });
+      if (!html) { html = '<p class="v">Fill in a section above, then select &ldquo;Create my plan&rdquo; again.</p>'; }
+      document.getElementById('planBody').innerHTML = html;
+      var plan = document.getElementById('plan');
+      plan.hidden = false;
+      plan.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    var planHome = null;
+    window.addEventListener('beforeprint', function () {
+      var plan = document.getElementById('plan');
+      if (plan.hidden) { buildPlan(); }
+      if (!planHome) { planHome = plan.parentNode; document.body.appendChild(plan); }
+    });
+    window.addEventListener('afterprint', function () {
+      var plan = document.getElementById('plan');
+      if (planHome) { planHome.appendChild(plan); planHome = null; }
+    });
+  </script>
 `,
 });
 
