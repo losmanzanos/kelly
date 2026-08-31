@@ -12,6 +12,13 @@
   --sage:       #617061;  /* primary button, prices */
   --mint:       #87b6a5;  /* logo circle, hairlines */
   --terracotta: #b25d2d;  /* form submit, sparing accent */
+
+  /* Colorado extension — harmonised with the original five */
+  --spruce:    #2f4038;  /* deep evergreen, ridgelines and dark bands */
+  --sandstone: #c08b62;  /* Flatirons rock, warm mid-tone */
+  --aspen:     #d2a03f;  /* autumn aspen gold, used sparingly */
+  --sky:       #cfdde0;  /* high-altitude pale sky */
+  --alpine:    #a8c4b8;  /* mint lifted toward sage-green */
   --rule:       rgba(97, 112, 97, 0.35);
 
   --serif: "Brygada 1918", "Iowan Old Style", Georgia, "Times New Roman", serif;
@@ -323,3 +330,114 @@ p:last-child { margin-bottom: 0; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+
+/* ==========================================================================
+   Colorado layer — layered ridgelines, alpine bands, natural accents.
+   All vector and CSS: no extra image weight.
+   ========================================================================== */
+
+
+/* a band that reads as high country: pale sky washing down to cream */
+.section--alpine {
+  background: linear-gradient(180deg, var(--sky) 0%, #e3e8e4 55%, var(--cream) 100%);
+}
+.section--spruce { background: var(--spruce); color: rgba(255,255,255,.86); }
+
+/* real photography, held back so type stays the loudest thing on the page */
+.section--photo {
+  position: relative; color: rgba(255,255,255,.92);
+  background: var(--spruce);
+  background-image:
+    linear-gradient(180deg, rgba(31,42,36,.86) 0%, rgba(31,42,36,.72) 50%, rgba(31,42,36,.88) 100%),
+    url("co-peaks.webp");
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+.section--photo h2, .section--photo h3 { color: #fff; }
+.section--photo .eyebrow { color: var(--alpine); }
+.section--photo a { color: var(--alpine); }
+.section--photo a:hover { color: var(--aspen); }
+
+/* slim full-bleed band — a glimpse, not a hero */
+.photostrip {
+  height: clamp(140px, 18vw, 240px);
+  background-size: cover; background-position: center 60%; background-repeat: no-repeat;
+  position: relative;
+}
+.photostrip::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(248,247,246,.35) 0%, rgba(248,247,246,0) 35%,
+                                       rgba(248,247,246,0) 65%, rgba(248,247,246,.35) 100%);
+}
+.photostrip--trail  { background-image: url("co-trail.webp"); }
+.photostrip--basin  { background-image: url("co-basin.webp"); }
+.photostrip--pines  { background-image: url("co-pines.webp"); }
+.photostrip--valley { background-image: url("co-valley.webp"); }
+
+/* page banner — sits under a page head, taller than a strip, still restrained */
+.banner {
+  height: clamp(190px, 24vw, 320px);
+  background-size: cover; background-position: center 55%; background-repeat: no-repeat;
+  position: relative;
+}
+.banner::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(248,247,246,.30) 0%, rgba(248,247,246,0) 40%,
+                                       rgba(248,247,246,0) 60%, rgba(248,247,246,.30) 100%);
+}
+.banner--pines  { background-image: url("co-pines.webp"); }
+.banner--peaks  { background-image: url("co-peaks.webp"); }
+.banner--aspen  { background-image: url("co-aspen.webp"); }
+.banner--basin  { background-image: url("co-basin.webp"); }
+.banner--trail  { background-image: url("co-trail.webp"); }
+.banner--valley { background-image: url("co-valley.webp"); }
+
+/* Breathing room whenever a photo band is followed by content.
+   !important is deliberate: several of these sections carry an inline
+   padding-top:0, and inline styles otherwise win. */
+.photostrip + section, .banner + section,
+.photostrip + article, .banner + article,
+.photostrip + .section, .banner + .section {
+  padding-top: clamp(3rem, 6vw, 5rem) !important;
+}
+.section--spruce h2, .section--spruce h3 { color: #fff; }
+.section--spruce .eyebrow { color: var(--alpine); }
+.section--spruce a { color: var(--alpine); }
+.section--spruce a:hover { color: var(--aspen); }
+
+/* eyebrow gets a small aspen-gold rule, like a trail marker */
+.eyebrow::after {
+  content: ""; display: block; width: 2rem; height: 2px;
+  background: var(--aspen); margin: .75rem auto 0; opacity: .85;
+}
+.page-head .eyebrow::after, .center .eyebrow::after { margin-inline: auto; }
+.framed .eyebrow::after, .stack .eyebrow::after { margin-inline: 0; }
+
+/* service cards pick up a warm ridge along the top edge */
+.service { border-top: 3px solid var(--sandstone); }
+.service:nth-child(2) { border-top-color: var(--alpine); }
+.service:nth-child(3) { border-top-color: var(--aspen); }
+.service:nth-child(4) { border-top-color: var(--sage); }
+
+/* pull-quote / statement band */
+.statement {
+  font-family: var(--serif); font-style: italic; font-weight: 600;
+  font-size: clamp(1.375rem, 3vw, 2rem); line-height: 1.35;
+  text-align: center; max-width: 34rem; margin-inline: auto;
+}
+
+/* native accordion for the homepage FAQ — no JS */
+.qa { border-bottom: 1px solid rgba(56,61,57,.12); }
+.qa summary {
+  cursor: pointer; list-style: none; padding: 1.1rem 2rem 1.1rem 0; position: relative;
+  font-family: var(--serif); font-weight: 700; color: var(--ink); font-size: 1.0625rem;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::after {
+  content: "+"; position: absolute; right: .25rem; top: 50%; transform: translateY(-50%);
+  font-family: var(--sans); font-weight: 400; font-size: 1.5rem; color: var(--sage); line-height: 1;
+}
+.qa[open] summary::after { content: "\2013"; }
+.qa summary:hover { color: var(--sage); }
+.qa summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
+.qa p { margin: 0 0 1.25rem; font-size: .9375rem; padding-right: 2rem; }

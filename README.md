@@ -1,83 +1,88 @@
-# Cool Bird Counseling — static site build
+# Cool Bird Counseling — static site
 
-Built from the template at `419626.us20.myftpupload.com`, with design tokens lifted
-directly from that build and copy updated against the live `coolbirdcounseling.com`.
+Hand-coded static build. No framework, no build step required to deploy —
+`node build.js` regenerates every page from one template.
 
-## Files
+## Pages (17)
+
+Home · About · Services · Documents · Resources · Blog · Contact
+Service detail: Individual Psychotherapy · Assessment · Clinical Supervision
+Also: FAQ · Safety Plan generator · Privacy Policy · Terms · 404 · 2 blog posts
+
+## Generated on every build
+
+| File | Purpose |
+|---|---|
+| `sitemap.xml` | All 17 URLs, priority-weighted |
+| `robots.txt` | Explicitly allows GPTBot, ClaudeBot, PerplexityBot, Google-Extended |
+| `llms.txt` | Structured practice summary for AI search |
+| `_redirects` | Cloudflare Pages 301s from every old Google Sites URL + `/*` → 404 |
+| `404.html` | Branded, links to every section |
+
+## Blog / TinaCMS
+
+Posts are markdown in `content/posts/` with frontmatter. `tina/config.js` is
+configured against that collection. To enable editing:
 
 ```
-index.html        Home
-about.html        Kelly's bio, approach, credentials
-services.html     Four services, rates, insurance, what to expect
-documents.html    Client paperwork index (placeholder links)
-resources.html    Crisis lines, recovery support, coverage, learning
-contact.html      Contact details + form
-assets/styles.css Single shared stylesheet
-build.js          Optional generator — regenerates all six pages from one template
+npx @tinacms/cli@latest init      # adds TINA_CLIENT_ID / TINA_TOKEN
+npx tinacms dev -c "node build.js"
 ```
 
-No build step is required to deploy. `build.js` exists so the header, footer, nav,
-and contact form only live in one place; run `node build.js` after editing it to
-regenerate the HTML.
+Kelly edits at `/admin`, Tina commits markdown, `build.js` regenerates the blog
+index and post pages. Adding a `.md` file is all it takes to publish a post.
 
-## Design tokens (pulled from the original build)
+## SEO / schema
 
-| Token | Value | Used for |
-|---|---|---|
-| `--cream` | `#f8f7f6` | page ground |
-| `--ink` | `#383d39` | headings, nav |
-| `--body` | `#4a4f4a` | body copy, footer ground |
-| `--sage` | `#617061` | primary button, prices |
-| `--mint` | `#87b6a5` | logo circle, hairlines |
-| `--terracotta` | `#b25d2d` | form submit |
+Every page carries a unique title (all ≤65 chars), unique meta description,
+canonical URL, OpenGraph tags, and JSON-LD. The graph always includes
+`MedicalBusiness` + `Person`; pages add `Service`, `FAQPage`, `Blog`, or
+`BlogPosting` as appropriate.
 
-Type: **Brygada 1918** (serif — display and body) and **Outfit** (sans — nav, buttons,
-eyebrows). Both are free Google Fonts, loaded from the CDN. Corner radius is 0
-throughout, matching the original.
+## Design tokens
 
-## Assets
+Original five: cream `#f8f7f6` · ink `#383d39` · body `#4a4f4a` ·
+sage `#617061` · mint `#87b6a5` · terracotta `#b25d2d`.
 
-All six are the real files, pulled from the original build — no placeholders, no
-substitutes.
+Colorado extension: spruce `#2f4038` · sandstone `#c08b62` ·
+aspen `#d2a03f` · sky `#cfdde0` · alpine `#a8c4b8`.
 
-| File | Size | Where it's used |
-|---|---|---|
-| `cbc-logo.svg` | 166×70 | Header lockup |
-| `cbc-logo-rev.svg` | 166×70 | Footer lockup (reversed/white) |
-| `hero-couch.webp` | 1920×699 | Home hero, flush to the bottom edge |
-| `kelly-faus.webp` | 900×900 | Circular portrait on Home and About |
-| `shadow-bg.webp` | 1920×1104 | Leaf-shadow texture behind the bio section |
-| `topographic-map.webp` | 1921×800 | Contour texture behind the services grid |
+Brygada 1918 + Outfit. Radius 0.
 
-The hero's background colour is `#d5d8d2`, sampled from the photo's own wall, so the
-join above the image is invisible. The couch begins 32.6% down the photo, which is why
-the hero carries `padding-bottom: 27vw` — copy never lands on the cushions at any width.
+Photography (Pexels license, free for commercial use, no attribution required):
 
-WebP is used as-is from the original. If you need broader legacy support, generate JPEG
-siblings and add them as `image-set()` fallbacks.
+| File | Where |
+|---|---|
+| `co-peaks.webp` | Home statement band (86% spruce overlay) + Assessment banner |
+| `co-valley.webp` | Slim strip above the footer, sitewide |
+| `co-basin.webp` | Strip under the About page header |
+| `co-trail.webp` | Supervision banner + "First session" post header |
+| `co-aspen.webp` | "Harm reduction" post header |
+| `co-pines.webp` | Individual Psychotherapy banner |
 
-## Still to confirm with Kelly
+All 2000×1125 WebP, ~300-400KB each. Every use is heavily overlaid or
+short-height so type stays dominant. Blog post headers come from a `hero` field
+in the markdown frontmatter, so Kelly can change a post's image by editing one
+line in Tina. Service banners are set via `banner:` on the page config.
+`.photostrip + section` / `.banner + section` guarantee breathing room after any
+photo band. Service cards take a coloured top rule
+(sandstone / alpine / aspen / sage). Homepage FAQ uses native `<details>` — no
+JavaScript.
 
-- **Couples counseling — $150.** The old template said $75; the live site doesn't list
-  couples at all. Scaled from the individual-rate change ($50 → $100). Verify.
-- **Clinical supervision rate.** Left as "Rate on request" rather than invented.
-- **Documents page.** All seven items are placeholders tagged "Coming soon." Real PDFs
-  need to come from Kelly, or from whatever EHR/portal he uses.
-- **Contact form.** `action="#"` — needs wiring to Formspree, Netlify Forms, or the host's
-  handler. Note that a plain form is not HIPAA-safe; the copy already tells clients not to
-  put clinical detail in it, but worth a conversation about a secure intake link instead.
-- **Scheduling buttons.** All point at `contact.html`. If he uses SonderMind or another
-  booking link, swap the hrefs.
-- **Credentials.** LAC = Licensed Addiction Counselor; "Certified Addiction Specialist" removed sitewide.
-- **Pronouns.** Everything uses he/him, consistent with the original bio.
-- **Asset licensing.** The couch and texture images came from the template build — worth
-  confirming with Kelly's sister that they're licensed for the live site, not comps.
+Hero background is `#d5d8d2`, sampled from the couch photo's wall so the join is
+invisible; the couch starts 32.6% down the image, hence `padding-bottom: 27vw`.
 
-## Accessibility / QA notes
+## Open items
 
-Verified at 1280px and 390px: no horizontal overflow on any page, every internal link
-resolves, mobile nav expands, skip link present, all form inputs labelled, focus states
-on nav and inputs, every image loads. Colour pairings meet WCAG AA for body text.
+- **Contact form** — `action="#"`. Needs Formspree, Cloudflare, or EmailJS.
+- **Documents** — HIPAA notice and ROI are live. Safety Plan generator is built
+  in-page; swap in Kelly's own HTML if he prefers it.
+- **Supervision rate** — "Rate on request" until Kelly sets a number.
+- **Analytics / Search Console** — IDs to be added at launch.
+- **DNS** — point A/CNAME at the host, leave MX untouched.
 
-`preview-home.html` is a standalone copy of the home page with the CSS and all six images
-inlined as data URIs — open it anywhere, no folder required.
+## QA
+
+Verified at 1280px and 390px across all 17 pages: every internal link resolves,
+one H1 per page, valid JSON-LD, no horizontal overflow, no JS errors.
+Safety Plan prints to a single clean page.

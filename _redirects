@@ -1,0 +1,20 @@
+# old Google Sites paths -> new pages (301, permanent)
+/home                 /                                        301
+/about                /about.html                              301
+/services             /services.html                           301
+/resources            /resources.html                          301
+/documents            /documents.html                          301
+/safety-plan          /safety-plan.html                        301
+
+# extensionless convenience URLs
+/contact              /contact.html                            301
+/faq                  /faq.html                                301
+/blog                 /blog.html                               301
+/privacy-policy       /privacy-policy.html                     301
+/terms                /terms.html                              301
+/individual-psychotherapy  /service-individual-psychotherapy.html  301
+/assessment           /service-assessment.html                 301
+/supervision          /service-clinical-supervision.html       301
+
+# anything else falls back to the custom 404
+/*                    /404.html                                404

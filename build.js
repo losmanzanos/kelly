@@ -14,15 +14,54 @@ const mark = (variant) =>
   `<img src="assets/cbc-logo${variant === 'light' ? '-rev' : ''}.svg" width="166" height="70"
         alt="Cool Bird Counseling — a peaceful bird on a branch with a soft green circle behind it">`;
 
+const SITE = 'https://www.coolbirdcounseling.com';
+
 const NAV = [
   ['index.html',     'Home'],
   ['about.html',     'About'],
   ['services.html',  'Services'],
   ['documents.html', 'Documents'],
-  ['safety-plan.html', 'Safety Plan'],
   ['resources.html', 'Resources'],
+  ['blog.html',      'Blog'],
   ['contact.html',   'Contact'],
 ];
+
+const FOOTER_EXTRA = [
+  ['faq.html',           'FAQ'],
+  ['safety-plan.html',   'Safety Plan'],
+  ['privacy-policy.html','Privacy Policy'],
+  ['terms.html',         'Terms'],
+];
+
+/* ---- JSON-LD ---------------------------------------------------------- */
+const ORG = {
+  '@type': 'MedicalBusiness',
+  '@id': SITE + '/#practice',
+  name: 'Cool Bird Counseling LLC',
+  url: SITE,
+  email: 'kelly@coolbirdcounseling.com',
+  telephone: '+1-303-351-1068',
+  priceRange: '$100-$150',
+  areaServed: { '@type': 'State', name: 'Colorado' },
+  availableService: ['Addiction counseling', 'Mental health therapy', 'Grief counseling',
+                     'Substance use assessment', 'Clinical supervision'],
+  founder: { '@id': SITE + '/#kelly' },
+};
+const PERSON = {
+  '@type': 'Person',
+  '@id': SITE + '/#kelly',
+  name: 'Kelly R. Faus',
+  honorificSuffix: 'MA, LPC, LAC',
+  jobTitle: 'Licensed Professional Counselor, Licensed Addiction Counselor',
+  email: 'kelly@coolbirdcounseling.com',
+  telephone: '+1-303-351-1068',
+  worksFor: { '@id': SITE + '/#practice' },
+  alumniOf: ['Adams State University', 'University of Northern Colorado'],
+};
+const ld = (extra) => JSON.stringify({ '@context': 'https://schema.org', '@graph': [ORG, PERSON].concat(extra || []) });
+
+
+
 
 const logo = (variant) => `<a class="logo" href="index.html">${mark(variant)}</a>`;
 
@@ -45,12 +84,18 @@ const header = (current) => `<header class="site-header">
   </div>
 </header>`;
 
-const footer = `<footer class="site-footer">
+const footer = `<div class="photostrip photostrip--valley" role="img" aria-label="A green alpine valley in the Colorado Rockies"></div>
+<footer class="site-footer">
   <div class="wrap">
     ${logo('light')}
     <nav aria-label="Footer">
       <ul>
         ${NAV.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('\n        ')}
+      </ul>
+    </nav>
+    <nav aria-label="More">
+      <ul style="margin-bottom:1.5rem;font-size:.875rem;opacity:.85">
+        ${FOOTER_EXTRA.map(([h, l]) => `<li><a href="${h}">${l}</a></li>`).join('\n        ')}
       </ul>
     </nav>
     <p class="site-footer__meta">&copy; ${new Date().getFullYear()} Cool Bird Counseling LLC &middot; Telehealth throughout Colorado</p>
@@ -62,7 +107,11 @@ const footer = `<footer class="site-footer">
   </div>
 </footer>`;
 
-const page = ({ file, title, description, body }) => `<!DOCTYPE html>
+const bannerHtml = (cls, alt) => cls
+  ? `<div class="banner banner--${cls}" role="img" aria-label="${alt || ''}"></div>\n`
+  : '';
+
+const page = ({ file, title, description, body, schema, banner, bannerAlt }) => `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -72,6 +121,13 @@ const page = ({ file, title, description, body }) => `<!DOCTYPE html>
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
 <meta property="og:type" content="website">
+<meta property="og:url" content="${SITE}/${file === 'index.html' ? '' : file}">
+<meta property="og:site_name" content="Cool Bird Counseling">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="geo.region" content="US-CO">
+<link rel="canonical" href="${SITE}/${file === 'index.html' ? '' : file}">
+<script type="application/ld+json">${ld(schema)}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
@@ -81,7 +137,7 @@ const page = ({ file, title, description, body }) => `<!DOCTYPE html>
 <a class="skip" href="#main">Skip to content</a>
 ${header(file)}
 <main id="main">
-${body}
+${banner ? body.replace('</section>', '</section>\n\n  ' + bannerHtml(banner, bannerAlt)) : body}
 </main>
 ${footer}
 </body>
@@ -119,7 +175,7 @@ const pages = [];
 /* ============================== HOME ==================================== */
 pages.push({
   file: 'index.html',
-  title: 'Cool Bird Counseling | Addiction & Mental Health Therapy in Colorado',
+  title: 'Addiction & Mental Health Counseling in Colorado | Cool Bird',
   description: 'Confidential addiction counseling, grief support, and mental health therapy for adults and adolescents across Colorado. Telehealth sessions with Kelly Faus, MA, LPC, LAC.',
   body: `
   <section class="hero">
@@ -135,7 +191,8 @@ pages.push({
     </div>
   </section>
 
-  <section class="section section--tint">
+
+  <section class="section section--tint" style="padding-top:clamp(2rem,4vw,3rem)">
     <div class="wrap center">
       <p class="eyebrow">Same-week openings available</p>
       <div class="grid grid--3" style="margin-top:1.5rem">
@@ -181,24 +238,59 @@ pages.push({
           <div class="price">$100</div>
           <p class="meta">45&ndash;60 minute session</p>
           <p class="desc">One-to-one work on substance use, grief, depression, anxiety, trauma, anger, and the patterns underneath them.</p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
+          <a class="btn btn--outline" href="service-individual-psychotherapy.html">Learn more</a>
         </article>
         <article class="framed service">
           <h3>Assessment</h3>
           <div class="price">$150</div>
           <p class="meta">60&ndash;90 minute session</p>
           <p class="desc">Substance use and mental health assessment, with written findings and clear recommendations for next steps.</p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
+          <a class="btn btn--outline" href="service-assessment.html">Learn more</a>
         </article>
         <article class="framed service">
           <h3>Clinical Supervision</h3>
           <div class="price" style="font-size:clamp(1.5rem,2.6vw,1.875rem);font-style:italic">Rate on request</div>
           <p class="meta">Individual or group</p>
           <p class="desc">Supervision for graduate interns, pre-licensed professionals, and peer recovery coaches, including CAC Core Curriculum credit.</p>
-          <a class="btn btn--outline" href="contact.html">Inquire</a>
+          <a class="btn btn--outline" href="service-clinical-supervision.html">Learn more</a>
         </article>
       </div>
       <p style="margin-top:2.5rem"><a href="services.html">See full service details, rates, and insurance &rarr;</a></p>
+    </div>
+  </section>
+
+
+  <section class="section section--photo">
+    <div class="wrap center">
+      <p class="statement">
+        &ldquo;Our emotional states are temporary, and they will pass.&rdquo;
+      </p>
+      <p style="margin-top:1.75rem;font-family:var(--sans);font-size:.8125rem;letter-spacing:.14em;text-transform:uppercase;opacity:.7">
+        Serving all of Colorado by telehealth
+      </p>
+    </div>
+  </section>
+
+
+  <section class="section section--alpine">
+    <div class="wrap narrow">
+      <div class="center">
+        <p class="eyebrow">Common questions</p>
+        <h2>Before you reach out</h2>
+      </div>
+      <div style="margin-top:2.5rem">
+        <details class="qa"><summary>Do you take insurance?</summary>
+          <p>Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p></details>
+        <details class="qa"><summary>Do I have to want to quit to work with you?</summary>
+          <p>No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it.</p></details>
+        <details class="qa"><summary>Are sessions in person or online?</summary>
+          <p>All sessions are conducted virtually via Zoom for Healthcare &mdash; no commute and no waiting room, anywhere in Colorado from Denver to the Western Slope.</p></details>
+        <details class="qa"><summary>What happens in a first session?</summary>
+          <p>Mostly history and orientation &mdash; what brought you here, what you have already tried, what you want to be different, and how we will know it is working. You do not need to prepare anything.</p></details>
+        <details class="qa"><summary>How much does it cost?</summary>
+          <p>Individual psychotherapy is $100 for a 45&ndash;60 minute session. A substance use and mental health assessment is $150 for a 60&ndash;90 minute session. Clinical supervision is quoted on request.</p></details>
+      </div>
+      <p class="center" style="margin-top:2.5rem"><a href="faq.html">Read all the questions &rarr;</a></p>
     </div>
   </section>
 
@@ -218,8 +310,10 @@ pages.push({
     <p class="lede">Counseling that starts where you actually are &mdash; not where a treatment manual says you should be.</p>
   </section>
 
-  <section class="wrap narrow">
-    <div class="portrait" style="margin-top:0">
+  <div class="photostrip photostrip--basin" role="img" aria-label="A broad Colorado valley opening between ranges"></div>
+
+  <section class="wrap narrow" style="padding-bottom:clamp(1rem,3vw,2rem)">
+    <div class="portrait" style="margin-top:clamp(3rem,6vw,5rem)">
       <img src="assets/kelly-faus.webp" width="900" height="900" alt="Kelly Faus, MA, LPC, LAC">
     </div>
   </section>
@@ -307,7 +401,7 @@ pages.push({
             Sessions are conversational, structured enough to make progress, and paced to what
             you can carry.
           </p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
+          <a class="btn btn--outline" href="service-individual-psychotherapy.html">Learn more</a>
         </article>
 
         <article class="framed service">
@@ -320,7 +414,7 @@ pages.push({
             probation, treatment programs, and licensing boards &mdash; and just as often by people
             who simply want a straight answer about where they stand.
           </p>
-          <a class="btn btn--outline" href="contact.html">Schedule Appointment</a>
+          <a class="btn btn--outline" href="service-assessment.html">Learn more</a>
         </article>
 
 
@@ -333,7 +427,7 @@ pages.push({
             If you&rsquo;re pursuing addiction counselor certification in Colorado, ask about
             CAC Core Curriculum credit &mdash; I can often cover required hours as part of supervision.
           </p>
-          <a class="btn btn--outline" href="contact.html">Inquire</a>
+          <a class="btn btn--outline" href="service-clinical-supervision.html">Learn more</a>
         </article>
 
       </div>
@@ -451,7 +545,7 @@ ${contactForm('Questions about the paperwork?', 'Ask before you sign &mdash; tha
 /* ============================ RESOURCES ================================= */
 pages.push({
   file: 'resources.html',
-  title: 'Colorado Mental Health & Recovery Resources | Cool Bird Counseling',
+  title: 'Colorado Crisis & Recovery Resources | Cool Bird',
   description: 'Crisis lines, recovery support meetings, insurance help, and family resources for Coloradans navigating addiction, grief, and mental health.',
   body: `
   <section class="page-head wrap">
@@ -823,9 +917,648 @@ pages.push({
 `,
 });
 
+/* ===================== INDIVIDUAL SERVICE PAGES ===================== */
+
+pages.push({
+  file: 'service-individual-psychotherapy.html',
+  banner: 'pines', bannerAlt: 'A quiet stand of Colorado pines',
+  title: 'Individual Psychotherapy in Colorado | Cool Bird',
+  description: 'Individual therapy for substance use, grief, depression, anxiety, trauma, anger, and codependency. $100 per 45-60 minute telehealth session, statewide in Colorado.',
+  schema: [{
+    '@type': 'Service', name: 'Individual Psychotherapy',
+    provider: { '@id': SITE + '/#practice' },
+    areaServed: { '@type': 'State', name: 'Colorado' },
+    serviceType: 'Individual Psychotherapy',
+    url: SITE + '/service-individual-psychotherapy.html'
+  }],
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow"><a href="services.html" style="color:inherit;text-decoration:none">Services</a></p>
+    <h1>Individual Psychotherapy</h1>
+    <p class="lede">Ongoing one-to-one counseling for adults and adolescents across Colorado, by secure video.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="framed service" style="text-align:center;margin-bottom:3rem">
+        <div class="price">$100</div>
+        <p class="meta">45&ndash;60 minute session</p>
+        <a class="btn btn--solid" href="contact.html">Book a consultation</a>
+      </div>
+      <p>Most people arrive at therapy at a specific moment &mdash; a relapse, a loss, a relationship coming apart, or the slow recognition that the way they have been coping has stopped working. Individual psychotherapy is the space to look at that clearly, with someone in the room who is not going to flinch.</p>
+      <p>I work with substance use, grief, depression, anxiety, trauma, anger, and codependency. In practice these rarely show up one at a time, so I do not treat them one at a time. We work with the whole picture: what happened, what it cost, what you are doing to manage it now, and what you would like to be different.</p>
+      <p>Sessions are conversational but structured enough to make progress. You should leave with something you can actually use before the next one, not just a feeling of having talked.</p>
+
+      <h2 style="margin-top:2.5rem">Who this is for</h2>
+      <ul class="ticks">
+        <li>Adults and adolescents navigating alcohol or drug use</li>
+        <li>People in early recovery, and people not sure recovery is the right word yet</li>
+        <li>Grief and bereavement, including loss to overdose or suicide</li>
+        <li>Depression, anxiety, trauma, anger, and codependency</li>
+        <li>Anyone who has tried therapy before and found it did not go anywhere</li>
+      </ul>
+
+      <h2 style="margin-top:2.5rem">What to expect</h2>
+      <ul class="ticks">
+        <li>A free consultation call before you commit to anything</li>
+        <li>Weekly sessions to start for most people, tapering as things steady out</li>
+        <li>Secure video through Zoom for Healthcare &mdash; no commute, no waiting room</li>
+        <li>Direct feedback, and goals you set rather than goals I assign</li>
+      </ul>
+
+      <p class="callout" style="margin-top:2.5rem">
+        All sessions are conducted virtually via Zoom for Healthcare, anywhere in Colorado.
+        <a href="services.html">See all services and payment options &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+${contactForm('Book a consultation', 'Free, confidential, and no obligation to schedule.')}
+`,
+});
+
+pages.push({
+  file: 'service-assessment.html',
+  banner: 'peaks', bannerAlt: 'Snow on the Colorado Front Range',
+  title: 'Substance Use Assessment in Colorado | Cool Bird',
+  description: 'Court, employer, probation, and self-referred substance use and mental health assessments in Colorado. $150 for a 60-90 minute session with written findings.',
+  schema: [{
+    '@type': 'Service', name: 'Substance Use and Mental Health Assessment',
+    provider: { '@id': SITE + '/#practice' },
+    areaServed: { '@type': 'State', name: 'Colorado' },
+    serviceType: 'Substance Use and Mental Health Assessment',
+    url: SITE + '/service-assessment.html'
+  }],
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow"><a href="services.html" style="color:inherit;text-decoration:none">Services</a></p>
+    <h1>Substance Use &amp; Mental Health Assessment</h1>
+    <p class="lede">A thorough evaluation with written findings and clear level-of-care recommendations.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="framed service" style="text-align:center;margin-bottom:3rem">
+        <div class="price">$150</div>
+        <p class="meta">60&ndash;90 minute session</p>
+        <a class="btn btn--solid" href="contact.html">Book a consultation</a>
+      </div>
+      <p>An assessment is a structured conversation about your substance use and mental health history, current functioning, and risk factors, resulting in a written report with recommendations for level of care.</p>
+      <p>These are commonly requested by courts, employers, probation officers, treatment programs, and licensing boards. Just as often, people request one for themselves because they want a straight answer about where they actually stand rather than continuing to guess.</p>
+      <p>I conduct assessments the same way I conduct therapy: without judgment, and without a predetermined conclusion. The report reflects what the evaluation actually found.</p>
+
+      <h2 style="margin-top:2.5rem">Who this is for</h2>
+      <ul class="ticks">
+        <li>Court-ordered or probation-referred evaluations</li>
+        <li>Employer, licensing board, or professional health program referrals</li>
+        <li>Treatment programs needing a level-of-care recommendation</li>
+        <li>Individuals who want an honest, professional read on their own use</li>
+      </ul>
+
+      <h2 style="margin-top:2.5rem">What to expect</h2>
+      <ul class="ticks">
+        <li>One 60&ndash;90 minute telehealth session</li>
+        <li>Written findings and level-of-care recommendations</li>
+        <li>Turnaround discussed up front so you can meet any deadline</li>
+        <li>A copy released only where you authorize it in writing</li>
+      </ul>
+
+      <p class="callout" style="margin-top:2.5rem">
+        All sessions are conducted virtually via Zoom for Healthcare, anywhere in Colorado.
+        <a href="services.html">See all services and payment options &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+${contactForm('Book a consultation', 'Free, confidential, and no obligation to schedule.')}
+`,
+});
+
+pages.push({
+  file: 'service-clinical-supervision.html',
+  banner: 'trail', bannerAlt: 'A trail winding through the Colorado high country',
+  title: 'Clinical Supervision & CAC Credit in Colorado | Cool Bird',
+  description: 'Clinical supervision for graduate interns, pre-licensed professionals, and peer recovery coaches in Colorado. CAC Core Curriculum credit available.',
+  schema: [{
+    '@type': 'Service', name: 'Clinical Supervision',
+    provider: { '@id': SITE + '/#practice' },
+    areaServed: { '@type': 'State', name: 'Colorado' },
+    serviceType: 'Clinical Supervision',
+    url: SITE + '/service-clinical-supervision.html'
+  }],
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow"><a href="services.html" style="color:inherit;text-decoration:none">Services</a></p>
+    <h1>Clinical Supervision</h1>
+    <p class="lede">Supervision for graduate interns, pre-licensed clinicians, and peer recovery coaches.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="framed service" style="text-align:center;margin-bottom:3rem">
+        <div class="price">Rate on request</div>
+        <p class="meta">Individual or group</p>
+        <a class="btn btn--solid" href="contact.html">Book a consultation</a>
+      </div>
+      <p>Supervision should do more than sign off on hours. Good supervision gives you somewhere to bring the case that is keeping you up, the client you are quietly dreading, and the question you are embarrassed to ask.</p>
+      <p>I supervise graduate interns, pre-licensed professionals working toward LPC or LAC, and peer recovery coaches. If you are pursuing addiction counselor certification in Colorado, ask about CAC Core Curriculum credit &mdash; required coursework hours can often be covered as part of supervision.</p>
+      <p>As Clinical Director at Denver Recovery Solutions and a supervisor with Lost and Found Behavioral Wellness, I spend a lot of my week on the development side of this field. It is genuinely the part of the work I enjoy most.</p>
+
+      <h2 style="margin-top:2.5rem">Who this is for</h2>
+      <ul class="ticks">
+        <li>Graduate interns completing practicum or internship hours</li>
+        <li>Pre-licensed clinicians working toward LPC or LAC</li>
+        <li>Peer recovery coaches seeking structured supervision</li>
+        <li>Candidates pursuing CAC certification in Colorado</li>
+      </ul>
+
+      <h2 style="margin-top:2.5rem">What to expect</h2>
+      <ul class="ticks">
+        <li>Individual or group formats</li>
+        <li>CAC Core Curriculum credit where applicable</li>
+        <li>Documentation of hours in the form your board requires</li>
+        <li>Case consultation, ethics, and honest developmental feedback</li>
+      </ul>
+
+      <p class="callout" style="margin-top:2.5rem">
+        All sessions are conducted virtually via Zoom for Healthcare, anywhere in Colorado.
+        <a href="services.html">See all services and payment options &rarr;</a>
+      </p>
+    </div>
+  </section>
+
+${contactForm('Book a consultation', 'Free, confidential, and no obligation to schedule.')}
+`,
+});
+
+
+/* ================================ FAQ ================================== */
+pages.push({
+  file: 'faq.html',
+  title: 'Counseling FAQ | Cool Bird Counseling, Colorado',
+  description: 'Costs, insurance, telehealth, first sessions, assessments, supervision, and crisis resources — straight answers about counseling with Kelly Faus, MA, LPC, LAC.',
+  schema: [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you take insurance?", "acceptedAnswer": {"@type": "Answer", "text": "Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company."}}, {"@type": "Question", "name": "How much does a session cost?", "acceptedAnswer": {"@type": "Answer", "text": "Individual psychotherapy is $100 for a 45&ndash;60 minute session. A substance use and mental health assessment is $150 for a 60&ndash;90 minute session. Clinical supervision is quoted on request."}}, {"@type": "Question", "name": "Are sessions in person or online?", "acceptedAnswer": {"@type": "Answer", "text": "All sessions are conducted virtually via Zoom for Healthcare. That means no commute and no waiting room, and it means I can see clients anywhere in Colorado \u2014 from Denver to the Western Slope."}}, {"@type": "Question", "name": "Do I have to want to quit drinking or using to work with you?", "acceptedAnswer": {"@type": "Answer", "text": "No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it."}}, {"@type": "Question", "name": "What happens in a first session?", "acceptedAnswer": {"@type": "Answer", "text": "Mostly history and orientation \u2014 what brought you here, what you have already tried, what you want to be different, and how we will know it is working. You do not need to prepare anything or explain everything up front."}}, {"@type": "Question", "name": "How long will I be in therapy?", "acceptedAnswer": {"@type": "Answer", "text": "Most people start weekly and taper as things steady out. Some people come for a few months around a specific crisis; others stay longer. You set the goals, and we revisit whether it is still working."}}, {"@type": "Question", "name": "Do you work with teenagers?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I work with both adolescents and adults on substance use, grief, and mental health concerns."}}, {"@type": "Question", "name": "Can you provide a court-ordered assessment?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Substance use and mental health assessments are frequently requested by courts, probation, employers, and licensing boards. You receive written findings with level-of-care recommendations, released only where you authorize it in writing."}}, {"@type": "Question", "name": "Do you offer supervision for CAC certification?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I supervise graduate interns, pre-licensed professionals, and peer recovery coaches, and CAC Core Curriculum credit is available where applicable."}}, {"@type": "Question", "name": "What if I am in crisis right now?", "acceptedAnswer": {"@type": "Answer", "text": "Call or text 988 to reach the Suicide & Crisis Lifeline, answered in Colorado 24 hours a day. If you are in immediate danger, call 911. This website is not a crisis service and messages here are not monitored around the clock."}}, {"@type": "Question", "name": "What is a Good Faith Estimate?", "acceptedAnswer": {"@type": "Answer", "text": "Under the No Surprises Act, clients who are uninsured or not using insurance have the right to a written estimate of expected costs before care begins. One is provided to qualifying clients and to anyone else on request."}}, {"@type": "Question", "name": "How do I get started?", "acceptedAnswer": {"@type": "Answer", "text": "Send a note through the contact page, email kelly@coolbirdcounseling.com, or call (303) 351-1068. I reply within one business day, and the consultation is free with no obligation to book."}}]}],
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow">FAQ</p>
+    <h1>Questions people actually ask.</h1>
+    <p class="lede">If yours isn&rsquo;t here, just ask &mdash; I reply within one business day.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="framed">
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Do you take insurance?</h3>
+          <p style="font-size:.9375rem;margin:0">Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">How much does a session cost?</h3>
+          <p style="font-size:.9375rem;margin:0">Individual psychotherapy is $100 for a 45&ndash;60 minute session. A substance use and mental health assessment is $150 for a 60&ndash;90 minute session. Clinical supervision is quoted on request.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Are sessions in person or online?</h3>
+          <p style="font-size:.9375rem;margin:0">All sessions are conducted virtually via Zoom for Healthcare. That means no commute and no waiting room, and it means I can see clients anywhere in Colorado &mdash; from Denver to the Western Slope.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Do I have to want to quit drinking or using to work with you?</h3>
+          <p style="font-size:.9375rem;margin:0">No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">What happens in a first session?</h3>
+          <p style="font-size:.9375rem;margin:0">Mostly history and orientation &mdash; what brought you here, what you have already tried, what you want to be different, and how we will know it is working. You do not need to prepare anything or explain everything up front.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">How long will I be in therapy?</h3>
+          <p style="font-size:.9375rem;margin:0">Most people start weekly and taper as things steady out. Some people come for a few months around a specific crisis; others stay longer. You set the goals, and we revisit whether it is still working.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Do you work with teenagers?</h3>
+          <p style="font-size:.9375rem;margin:0">Yes. I work with both adolescents and adults on substance use, grief, and mental health concerns.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Can you provide a court-ordered assessment?</h3>
+          <p style="font-size:.9375rem;margin:0">Yes. Substance use and mental health assessments are frequently requested by courts, probation, employers, and licensing boards. You receive written findings with level-of-care recommendations, released only where you authorize it in writing.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">Do you offer supervision for CAC certification?</h3>
+          <p style="font-size:.9375rem;margin:0">Yes. I supervise graduate interns, pre-licensed professionals, and peer recovery coaches, and CAC Core Curriculum credit is available where applicable.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">What if I am in crisis right now?</h3>
+          <p style="font-size:.9375rem;margin:0">Call or text 988 to reach the Suicide &amp; Crisis Lifeline, answered in Colorado 24 hours a day. If you are in immediate danger, call 911. This website is not a crisis service and messages here are not monitored around the clock.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">What is a Good Faith Estimate?</h3>
+          <p style="font-size:.9375rem;margin:0">Under the No Surprises Act, clients who are uninsured or not using insurance have the right to a written estimate of expected costs before care begins. One is provided to qualifying clients and to anyone else on request.</p>
+        </div>
+        <div class="doc-row" style="display:block">
+          <h3 style="font-size:1.125rem;margin-bottom:.35em">How do I get started?</h3>
+          <p style="font-size:.9375rem;margin:0">Send a note through the contact page, email kelly@coolbirdcounseling.com, or call (303) 351-1068. I reply within one business day, and the consultation is free with no obligation to book.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+${contactForm('Still have a question?', 'Ask directly. No obligation, no sales pitch.')}
+`,
+});
+
+
+/* ================================ BLOG ================================= */
+/* Posts live as markdown in content/posts/ so TinaCMS can edit them.
+   Re-run `node build.js` (Tina does this automatically) to regenerate. */
+function parsePosts() {
+  const dir = path.join(OUT, 'content', 'posts');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter(f => f.endsWith('.md')).map(f => {
+    const raw = fs.readFileSync(path.join(dir, f), 'utf8');
+    const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    const fm = {}, meta = m ? m[1] : '', body = m ? m[2] : raw;
+    meta.split('\n').forEach(line => {
+      const kv = line.match(/^(\w+):\s*(.*)$/);
+      if (!kv) return;
+      let v = kv[2].trim().replace(/^"(.*)"$/, '$1');
+      if (v.startsWith('[')) v = v.slice(1, -1).split(',').map(x => x.trim().replace(/^"(.*)"$/, '$1'));
+      fm[kv[1]] = v;
+    });
+    fm.slug = fm.slug || f.replace(/\.md$/, '');
+    fm.file = 'blog-' + fm.slug + '.html';
+    fm.md = body.trim();
+    return fm;
+  }).sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+/* minimal markdown → HTML: headings, bold, italic, links, paragraphs */
+function mdToHtml(md) {
+  const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const inline = t => esc(t)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*]+?)\*/g, '$1<em>$2</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+    .replace(/ — /g, ' &mdash; ');
+  return md.split(/\n{2,}/).map(block => {
+    const b = block.trim();
+    if (b.startsWith('## ')) return `<h2 style="margin-top:2.5rem">${inline(b.slice(3))}</h2>`;
+    if (b.startsWith('# ')) return `<h2>${inline(b.slice(2))}</h2>`;
+    return `<p>${inline(b).replace(/\n/g, ' ')}</p>`;
+  }).join('\n      ');
+}
+
+const POSTS = parsePosts();
+const prettyDate = d => new Date(d + 'T12:00:00').toLocaleDateString('en-US',
+  { year: 'numeric', month: 'long', day: 'numeric' });
+
+POSTS.forEach(post => {
+  pages.push({
+    file: post.file,
+    banner: post.hero, bannerAlt: post.heroAlt,
+    title: post.title,
+    description: post.description,
+    schema: [{
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.description,
+      datePublished: post.date,
+      author: { '@id': SITE + '/#kelly' },
+      publisher: { '@id': SITE + '/#practice' },
+      mainEntityOfPage: SITE + '/' + post.file,
+      keywords: [].concat(post.tags || []).join(', '),
+    }],
+    body: `
+  <section class="page-head wrap">
+    <p class="eyebrow"><a href="blog.html" style="color:inherit;text-decoration:none">Blog</a></p>
+    <h1>${post.title}</h1>
+    <p class="lede">${prettyDate(post.date)}${(post.tags || []).length ? ' &middot; ' + [].concat(post.tags).join(', ') : ''}</p>
+  </section>
+
+  <article class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      ${mdToHtml(post.md)}
+      <p class="callout" style="margin-top:3rem">
+        Kelly Faus, MA, LPC, LAC is an addiction and mental health counselor serving clients
+        throughout Colorado by telehealth. <a href="contact.html">Book a free consultation &rarr;</a>
+      </p>
+    </div>
+  </article>
+
+${contactForm('Start your journey today', 'A short conversation costs nothing and commits you to nothing.')}
+`,
+  });
+});
+
+pages.push({
+  file: 'blog.html',
+  title: 'Blog | Cool Bird Counseling, Colorado',
+  description: 'Plain-language writing on addiction, recovery, grief, and mental health from Kelly Faus, MA, LPC, LAC, a counselor serving clients throughout Colorado.',
+  schema: [{ '@type': 'Blog', name: 'Cool Bird Counseling Blog', url: SITE + '/blog.html',
+             author: { '@id': SITE + '/#kelly' } }],
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow">Blog</p>
+    <h1>Notes from the practice.</h1>
+    <p class="lede">Plain writing on addiction, recovery, grief, and getting started &mdash; the things people ask about before they ever pick up the phone.</p>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      ${POSTS.map(post => `
+      <article class="framed" style="margin-bottom:1.5rem">
+        <p class="eyebrow" style="margin-bottom:.5rem">${prettyDate(post.date)}</p>
+        <h2 style="font-size:clamp(1.375rem,2.6vw,1.75rem)"><a href="${post.file}" style="color:var(--ink);text-decoration:none">${post.title}</a></h2>
+        <p style="font-size:.9375rem">${post.description}</p>
+        <p style="margin-top:1.25rem"><a href="${post.file}">Read it &rarr;</a></p>
+      </article>`).join('\n')}
+    </div>
+  </section>
+
+${contactForm('Rather just talk?', 'Reading only gets you so far. The consultation is free.')}
+`,
+});
+
+
+/* ============================ LEGAL PAGES ============================== */
+const legalWrap = (eyebrow, h1, lede, body) => `
+  <section class="page-head wrap">
+    <p class="eyebrow">${eyebrow}</p>
+    <h1>${h1}</h1>
+    <p class="lede">${lede}</p>
+  </section>
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow stack">${body}</div>
+  </section>`;
+
+pages.push({
+  file: 'privacy-policy.html',
+  title: 'Privacy Policy | Cool Bird Counseling',
+  description: 'How Cool Bird Counseling LLC handles information collected through this website, and how that differs from protected health information covered by HIPAA.',
+  body: legalWrap('Privacy Policy', 'Privacy Policy',
+    `Last updated ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`, `
+      <p class="callout">
+        <strong>This policy covers the website only.</strong> Protected health information created
+        in the course of treatment is governed separately by the
+        <a href="assets/cool-bird-hipaa-notice.pdf">Notice of Privacy Practices</a>, which you
+        receive before your first session.
+      </p>
+
+      <h2>What this site collects</h2>
+      <p>
+        If you use the contact form, I receive the name, email address, phone number, and message
+        you submit. That information is used to respond to you and to schedule care. It is not sold,
+        rented, or shared for marketing, ever.
+      </p>
+      <p>
+        The site uses privacy-respecting analytics to understand which pages people find useful.
+        This records aggregate information such as page views, approximate region, and referring
+        site. It does not identify you personally, and it is not tied to any clinical record.
+      </p>
+
+      <h2>What this site does not collect</h2>
+      <ul class="ticks">
+        <li>No advertising trackers, retargeting pixels, or third-party ad networks</li>
+        <li>No sale or sharing of any information with data brokers</li>
+        <li>Nothing entered into the Safety Plan generator &mdash; that stays in your browser and is never transmitted</li>
+      </ul>
+
+      <h2>Email and the contact form</h2>
+      <p>
+        Standard email and web forms are not secure channels for health information. Please keep
+        clinical detail out of them; we will move to a secure channel once we connect. A message
+        sent through this site does not establish a therapeutic relationship.
+      </p>
+
+      <h2>Retention</h2>
+      <p>
+        Contact-form messages are kept only as long as needed to respond and, where care begins, to
+        meet the record-keeping requirements that apply to licensed counselors in Colorado.
+        Analytics data is aggregate and retained on a rolling basis.
+      </p>
+
+      <h2>Your choices</h2>
+      <p>
+        You can ask what information is held about you, ask for it to be corrected, or ask for it to
+        be deleted where no legal or clinical retention requirement applies. Write to
+        <a href="mailto:kelly@coolbirdcounseling.com">kelly@coolbirdcounseling.com</a>.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        This site is not directed at children under 13 and does not knowingly collect their
+        information. Adolescent clients are seen with the consents Colorado law requires.
+      </p>
+
+      <h2>Changes</h2>
+      <p>Material changes will be posted here with a revised date.</p>
+
+      <h2>Contact</h2>
+      <p>
+        Cool Bird Counseling LLC &middot;
+        <a href="mailto:kelly@coolbirdcounseling.com">kelly@coolbirdcounseling.com</a> &middot;
+        <a href="tel:+13033511068">(303) 351-1068</a>
+      </p>`),
+});
+
+pages.push({
+  file: 'terms.html',
+  title: 'Terms & Conditions | Cool Bird Counseling',
+  description: 'Terms of use for the Cool Bird Counseling website, including the limits of information provided here and what does not constitute clinical advice.',
+  body: legalWrap('Terms', 'Terms &amp; Conditions',
+    `Last updated ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}.`, `
+      <p class="callout">
+        <strong>This website is not a crisis service.</strong> If you are in crisis, call or text
+        <a href="tel:988">988</a>. If you are in immediate danger, call <a href="tel:911">911</a>.
+        Messages sent through this site are not monitored around the clock.
+      </p>
+
+      <h2>Informational only</h2>
+      <p>
+        Everything on this site is general information about counseling and mental health. It is not
+        clinical advice, diagnosis, or treatment, and reading it does not create a counselor&ndash;client
+        relationship. That relationship begins only when you and I have agreed to work together and
+        the required consents are signed.
+      </p>
+
+      <h2>Licensure and scope</h2>
+      <p>
+        Kelly R. Faus is a Licensed Professional Counselor and Licensed Addiction Counselor in the
+        State of Colorado. Services are available only to people physically located in Colorado at
+        the time of a session. Colorado licenses can be verified through the Department of
+        Regulatory Agencies.
+      </p>
+
+      <h2>Appointments, fees, and cancellations</h2>
+      <ul class="ticks">
+        <li>Current rates are listed on the <a href="services.html">Services</a> page and may change with notice</li>
+        <li>Please give 24 hours&rsquo; notice to change or cancel; late cancellations and no-shows may be billed at the full rate</li>
+        <li>Payment is due at the time of service unless other arrangements are made in writing</li>
+        <li>A Good Faith Estimate is available to qualifying clients and on request</li>
+      </ul>
+
+      <h2>Telehealth</h2>
+      <p>
+        Sessions are conducted over Zoom for Healthcare. You are responsible for a private location
+        and a working connection. Telehealth carries limitations, including the possibility of
+        technical interruption; these are covered in the telehealth consent you sign before starting.
+      </p>
+
+      <h2>Third-party links and documents</h2>
+      <p>
+        Resources listed on this site belong to independent organizations. Listing them is a starting
+        point, not an endorsement of any particular course of treatment, and I am not responsible for
+        their content or practices.
+      </p>
+
+      <h2>The Safety Plan generator</h2>
+      <p>
+        The <a href="safety-plan.html">Safety Plan generator</a> is an educational tool. It does not
+        store or transmit what you enter, and it is not a substitute for a safety plan developed with
+        a clinician. Print or save your plan before leaving the page.
+      </p>
+
+      <h2>Limitation of liability</h2>
+      <p>
+        This site is provided as is. To the fullest extent permitted by Colorado law, Cool Bird
+        Counseling LLC is not liable for damages arising from use of, or reliance on, information
+        presented here. These terms are governed by the laws of the State of Colorado.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Cool Bird Counseling LLC &middot;
+        <a href="mailto:kelly@coolbirdcounseling.com">kelly@coolbirdcounseling.com</a> &middot;
+        <a href="tel:+13033511068">(303) 351-1068</a>
+      </p>`),
+});
+
 /* ---------- write -------------------------------------------------------- */
 
 for (const p of pages) {
   fs.writeFileSync(path.join(OUT, p.file), page(p));
   console.log('wrote', p.file);
 }
+
+/* ================= sitemap / robots / llms / redirects ================== */
+const today = new Date().toISOString().slice(0, 10);
+const urlOf = f => SITE + '/' + (f === 'index.html' ? '' : f);
+const priority = f => f === 'index.html' ? '1.0'
+  : /^(services|contact|about)\.html$/.test(f) ? '0.9'
+  : /^service-/.test(f) ? '0.8'
+  : /^(blog|faq|resources|documents|safety-plan)\.html$/.test(f) ? '0.7'
+  : /^blog-/.test(f) ? '0.6' : '0.3';
+
+fs.writeFileSync(path.join(OUT, 'sitemap.xml'),
+`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map(pg => `  <url>
+    <loc>${urlOf(pg.file)}</loc>
+    <lastmod>${today}</lastmod>
+    <priority>${priority(pg.file)}</priority>
+  </url>`).join('\n')}
+</urlset>
+`);
+
+fs.writeFileSync(path.join(OUT, 'robots.txt'),
+`User-agent: *
+Allow: /
+
+# AI crawlers are welcome — see /llms.txt for a structured summary
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: ${SITE}/sitemap.xml
+`);
+
+fs.writeFileSync(path.join(OUT, 'llms.txt'),
+`# Cool Bird Counseling LLC
+
+> Addiction, grief, and mental health counseling for adolescents and adults throughout
+> Colorado, delivered by telehealth. Solo practice of Kelly R. Faus, MA, LPC, LAC.
+
+## Practitioner
+Kelly R. Faus, MA, LPC, LAC — Licensed Professional Counselor and Licensed Addiction
+Counselor in Colorado. Trained at Adams State University and the University of Northern
+Colorado. Gottman Method training, Levels 1 & 2. Also serves as Clinical Director at Denver
+Recovery Solutions and as a supervisor with Lost and Found Behavioral Wellness.
+
+## Services and rates
+- Individual Psychotherapy — $100, 45–60 minutes: ${SITE}/service-individual-psychotherapy.html
+- Substance Use & Mental Health Assessment — $150, 60–90 minutes: ${SITE}/service-assessment.html
+- Clinical Supervision (CAC Core Curriculum credit available), rate on request: ${SITE}/service-clinical-supervision.html
+
+## Key facts
+- All sessions are virtual, via Zoom for Healthcare, anywhere in Colorado
+- Medicaid accepted through Colorado Access; private pay available; ask about current network participation
+- Works with substance use, grief, depression, anxiety, trauma, anger, and codependency
+- Adolescents and adults
+- Good Faith Estimate provided to qualifying clients and on request
+
+## Pages
+${pages.map(pg => `- ${pg.title.split('|')[0].trim()}: ${urlOf(pg.file)}`).join('\n')}
+
+## Contact
+Email: kelly@coolbirdcounseling.com
+Phone: (303) 351-1068
+Crisis: call or text 988 (Suicide & Crisis Lifeline). Emergencies: 911.
+This site is not a crisis service.
+`);
+
+/* Cloudflare Pages redirects — every URL from the old Google Sites build.
+   Switch on at cutover; no existing link 404s. */
+fs.writeFileSync(path.join(OUT, '_redirects'),
+`# old Google Sites paths -> new pages (301, permanent)
+/home                 /                                        301
+/about                /about.html                              301
+/services             /services.html                           301
+/resources            /resources.html                          301
+/documents            /documents.html                          301
+/safety-plan          /safety-plan.html                        301
+
+# extensionless convenience URLs
+/contact              /contact.html                            301
+/faq                  /faq.html                                301
+/blog                 /blog.html                               301
+/privacy-policy       /privacy-policy.html                     301
+/terms                /terms.html                              301
+/individual-psychotherapy  /service-individual-psychotherapy.html  301
+/assessment           /service-assessment.html                 301
+/supervision          /service-clinical-supervision.html       301
+
+# anything else falls back to the custom 404
+/*                    /404.html                                404
+`);
+
+fs.writeFileSync(path.join(OUT, '404.html'), page({
+  file: '404.html',
+  title: 'Page not found | Cool Bird Counseling',
+  description: 'That page has moved or no longer exists. Here is where to find what you were looking for.',
+  body: `
+  <section class="page-head wrap">
+    <p class="eyebrow">404</p>
+    <h1>That page flew off somewhere.</h1>
+    <p class="lede">The link may be old, or the page may have moved. Everything is one click away below.</p>
+  </section>
+  <section class="section" style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="framed">
+        <ul class="ticks">
+          <li><a href="index.html">Home</a> &mdash; start here</li>
+          <li><a href="services.html">Services and rates</a></li>
+          <li><a href="about.html">About Kelly Faus</a></li>
+          <li><a href="documents.html">Documents</a> and the <a href="safety-plan.html">Safety Plan generator</a></li>
+          <li><a href="resources.html">Crisis and recovery resources</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <p class="callout" style="margin-top:2rem">
+          In crisis? Call or text <a href="tel:988">988</a>, any hour of the day.
+        </p>
+      </div>
+    </div>
+  </section>`,
+}));
+console.log('wrote sitemap.xml, robots.txt, llms.txt, _redirects, 404.html');
