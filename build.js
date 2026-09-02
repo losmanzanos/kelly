@@ -198,7 +198,7 @@ pages.push({
       <div class="grid grid--3" style="margin-top:1.5rem">
         <div><h3>Licensed statewide</h3><p>LPC and LAC in Colorado, seeing clients from Denver to the Western Slope.</p></div>
         <div><h3>Private and secure</h3><p>Sessions run on Zoom for Healthcare. No commute, no waiting room.</p></div>
-        <div><h3>Insurance or private pay</h3><p>Medicaid through Colorado Access, straightforward self-pay, or ask about current network participation.</p></div>
+        <div><h3>Insurance or private pay</h3><p>Straightforward private pay, or reach out and I&rsquo;ll tell you where network participation stands.</p></div>
       </div>
     </div>
   </section>
@@ -280,7 +280,7 @@ pages.push({
       </div>
       <div style="margin-top:2.5rem">
         <details class="qa"><summary>Do you take insurance?</summary>
-          <p>Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p></details>
+          <p>Network participation changes from time to time, so the honest answer is: ask me. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p></details>
         <details class="qa"><summary>Do I have to want to quit to work with you?</summary>
           <p>No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it.</p></details>
         <details class="qa"><summary>Are sessions in person or online?</summary>
@@ -447,9 +447,6 @@ pages.push({
         reach out and I&rsquo;ll tell you exactly where things stand and what your cost would be before
         we book anything.
       </p>
-      <p>
-        <strong>Medicaid.</strong> Health First Colorado members are accepted through Colorado Access.
-      </p>
       <p class="callout">
         <strong>Good Faith Estimate.</strong> Under the No Surprises Act, clients who are uninsured or
         not using insurance have the right to a written estimate of expected costs before care begins.
@@ -605,14 +602,6 @@ pages.push({
       <h2 style="margin-top:3.5rem">Coverage &amp; access</h2>
       <ul class="resource-list">
         <li>
-          <strong>Colorado Access</strong>
-          <span>Behavioral health coverage for Health First Colorado (Medicaid) members.</span>
-        </li>
-        <li>
-          <strong>Health First Colorado</strong>
-          <span>Eligibility and enrollment at <a href="https://www.healthfirstcolorado.com/">healthfirstcolorado.com</a>.</span>
-        </li>
-        <li>
           <strong>DORA License Lookup</strong>
           <span>Verify any Colorado counselor&rsquo;s license at <a href="https://apps.colorado.gov/dora/licensing/Lookup/LicenseLookup.aspx">apps.colorado.gov</a>.</span>
         </li>
@@ -680,7 +669,7 @@ pages.push({
           <h3>Before you write</h3>
           <ul class="ticks">
             <li>A sentence or two about what&rsquo;s going on is plenty &mdash; no need to explain everything up front.</li>
-            <li>Let me know whether you&rsquo;re using insurance, Medicaid, or private pay.</li>
+            <li>Let me know whether you&rsquo;re planning to use insurance or private pay.</li>
             <li>Mention a few windows that work for you and I&rsquo;ll send times that match.</li>
             <li>Please leave detailed clinical or legal information out of email &mdash; we&rsquo;ll move to a secure channel once we connect.</li>
           </ul>
@@ -1097,7 +1086,7 @@ pages.push({
   file: 'faq.html',
   title: 'Counseling FAQ | Cool Bird Counseling, Colorado',
   description: 'Costs, insurance, telehealth, first sessions, assessments, supervision, and crisis resources — straight answers about counseling with Kelly Faus, MA, LPC, LAC.',
-  schema: [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you take insurance?", "acceptedAnswer": {"@type": "Answer", "text": "Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company."}}, {"@type": "Question", "name": "How much does a session cost?", "acceptedAnswer": {"@type": "Answer", "text": "Individual psychotherapy is $100 for a 45&ndash;60 minute session. A substance use and mental health assessment is $150 for a 60&ndash;90 minute session. Clinical supervision is quoted on request."}}, {"@type": "Question", "name": "Are sessions in person or online?", "acceptedAnswer": {"@type": "Answer", "text": "All sessions are conducted virtually via Zoom for Healthcare. That means no commute and no waiting room, and it means I can see clients anywhere in Colorado \u2014 from Denver to the Western Slope."}}, {"@type": "Question", "name": "Do I have to want to quit drinking or using to work with you?", "acceptedAnswer": {"@type": "Answer", "text": "No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it."}}, {"@type": "Question", "name": "What happens in a first session?", "acceptedAnswer": {"@type": "Answer", "text": "Mostly history and orientation \u2014 what brought you here, what you have already tried, what you want to be different, and how we will know it is working. You do not need to prepare anything or explain everything up front."}}, {"@type": "Question", "name": "How long will I be in therapy?", "acceptedAnswer": {"@type": "Answer", "text": "Most people start weekly and taper as things steady out. Some people come for a few months around a specific crisis; others stay longer. You set the goals, and we revisit whether it is still working."}}, {"@type": "Question", "name": "Do you work with teenagers?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I work with both adolescents and adults on substance use, grief, and mental health concerns."}}, {"@type": "Question", "name": "Can you provide a court-ordered assessment?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Substance use and mental health assessments are frequently requested by courts, probation, employers, and licensing boards. You receive written findings with level-of-care recommendations, released only where you authorize it in writing."}}, {"@type": "Question", "name": "Do you offer supervision for CAC certification?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I supervise graduate interns, pre-licensed professionals, and peer recovery coaches, and CAC Core Curriculum credit is available where applicable."}}, {"@type": "Question", "name": "What if I am in crisis right now?", "acceptedAnswer": {"@type": "Answer", "text": "Call or text 988 to reach the Suicide & Crisis Lifeline, answered in Colorado 24 hours a day. If you are in immediate danger, call 911. This website is not a crisis service and messages here are not monitored around the clock."}}, {"@type": "Question", "name": "What is a Good Faith Estimate?", "acceptedAnswer": {"@type": "Answer", "text": "Under the No Surprises Act, clients who are uninsured or not using insurance have the right to a written estimate of expected costs before care begins. One is provided to qualifying clients and to anyone else on request."}}, {"@type": "Question", "name": "How do I get started?", "acceptedAnswer": {"@type": "Answer", "text": "Send a note through the contact page, email kelly@coolbirdcounseling.com, or call (303) 351-1068. I reply within one business day, and the consultation is free with no obligation to book."}}]}],
+  schema: [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you take insurance?", "acceptedAnswer": {"@type": "Answer", "text": "Network participation changes from time to time, so the honest answer is: ask me. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company."}}, {"@type": "Question", "name": "How much does a session cost?", "acceptedAnswer": {"@type": "Answer", "text": "Individual psychotherapy is $100 for a 45&ndash;60 minute session. A substance use and mental health assessment is $150 for a 60&ndash;90 minute session. Clinical supervision is quoted on request."}}, {"@type": "Question", "name": "Are sessions in person or online?", "acceptedAnswer": {"@type": "Answer", "text": "All sessions are conducted virtually via Zoom for Healthcare. That means no commute and no waiting room, and it means I can see clients anywhere in Colorado \u2014 from Denver to the Western Slope."}}, {"@type": "Question", "name": "Do I have to want to quit drinking or using to work with you?", "acceptedAnswer": {"@type": "Answer", "text": "No. Abstinence is one good goal among several. If harm reduction is where you are, that is where we start. I am not going to hand you a verdict on your use before we have even talked about it."}}, {"@type": "Question", "name": "What happens in a first session?", "acceptedAnswer": {"@type": "Answer", "text": "Mostly history and orientation \u2014 what brought you here, what you have already tried, what you want to be different, and how we will know it is working. You do not need to prepare anything or explain everything up front."}}, {"@type": "Question", "name": "How long will I be in therapy?", "acceptedAnswer": {"@type": "Answer", "text": "Most people start weekly and taper as things steady out. Some people come for a few months around a specific crisis; others stay longer. You set the goals, and we revisit whether it is still working."}}, {"@type": "Question", "name": "Do you work with teenagers?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I work with both adolescents and adults on substance use, grief, and mental health concerns."}}, {"@type": "Question", "name": "Can you provide a court-ordered assessment?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Substance use and mental health assessments are frequently requested by courts, probation, employers, and licensing boards. You receive written findings with level-of-care recommendations, released only where you authorize it in writing."}}, {"@type": "Question", "name": "Do you offer supervision for CAC certification?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. I supervise graduate interns, pre-licensed professionals, and peer recovery coaches, and CAC Core Curriculum credit is available where applicable."}}, {"@type": "Question", "name": "What if I am in crisis right now?", "acceptedAnswer": {"@type": "Answer", "text": "Call or text 988 to reach the Suicide & Crisis Lifeline, answered in Colorado 24 hours a day. If you are in immediate danger, call 911. This website is not a crisis service and messages here are not monitored around the clock."}}, {"@type": "Question", "name": "What is a Good Faith Estimate?", "acceptedAnswer": {"@type": "Answer", "text": "Under the No Surprises Act, clients who are uninsured or not using insurance have the right to a written estimate of expected costs before care begins. One is provided to qualifying clients and to anyone else on request."}}, {"@type": "Question", "name": "How do I get started?", "acceptedAnswer": {"@type": "Answer", "text": "Send a note through the contact page, email kelly@coolbirdcounseling.com, or call (303) 351-1068. I reply within one business day, and the consultation is free with no obligation to book."}}]}],
   body: `
   <section class="page-head wrap">
     <p class="eyebrow">FAQ</p>
@@ -1110,7 +1099,7 @@ pages.push({
       <div class="framed">
         <div class="doc-row" style="display:block">
           <h3 style="font-size:1.125rem;margin-bottom:.35em">Do you take insurance?</h3>
-          <p style="font-size:.9375rem;margin:0">Network participation changes from time to time, so the honest answer is: ask me. Medicaid clients are accepted through Colorado Access. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p>
+          <p style="font-size:.9375rem;margin:0">Network participation changes from time to time, so the honest answer is: ask me. Many people choose private pay because it allows for flexibility and confidentiality, free from restrictions, diagnoses, or other information on record with an insurance company.</p>
         </div>
         <div class="doc-row" style="display:block">
           <h3 style="font-size:1.125rem;margin-bottom:.35em">How much does a session cost?</h3>
@@ -1493,7 +1482,7 @@ Recovery Solutions and as a supervisor with Lost and Found Behavioral Wellness.
 
 ## Key facts
 - All sessions are virtual, via Zoom for Healthcare, anywhere in Colorado
-- Medicaid accepted through Colorado Access; private pay available; ask about current network participation
+- Private pay available; ask about current network participation
 - Works with substance use, grief, depression, anxiety, trauma, anger, and codependency
 - Adolescents and adults
 - Good Faith Estimate provided to qualifying clients and on request
