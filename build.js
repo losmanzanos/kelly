@@ -132,13 +132,30 @@ const page = ({ file, title, description, body, schema, banner, bannerAlt }) => 
 <meta name="description" content="${description}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${/^blog-/.test(file) ? 'article' : 'website'}">
 <meta property="og:url" content="${SITE}/${file === 'index.html' ? '' : file.replace(/\.html$/, '')}">
 <meta property="og:site_name" content="Cool Bird Counseling">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="${SITE}/assets/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="Cool Bird Counseling — addiction and mental health counseling, telehealth throughout Colorado">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${description}">
+<meta name="twitter:image" content="${SITE}/assets/og-card.jpg">
+<meta name="twitter:image:alt" content="Cool Bird Counseling — telehealth counseling throughout Colorado">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="geo.region" content="US-CO">
+<meta name="geo.placename" content="Colorado">
+<meta name="author" content="Kelly R. Faus, MA, LPC, LAC">
+<meta name="theme-color" content="#2f4038">
 <link rel="canonical" href="${SITE}/${file === 'index.html' ? '' : file.replace(/\.html$/, '')}">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <script type="application/ld+json">${ld(schema)}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -243,7 +260,7 @@ const pages = [];
 pages.push({
   file: 'index.html',
   title: 'Addiction & Mental Health Counseling in Colorado | Cool Bird',
-  description: 'Confidential addiction counseling, grief support, and mental health therapy for adults and adolescents across Colorado. Telehealth sessions with Kelly Faus, MA, LPC, LAC.',
+  description: 'Confidential addiction counseling, grief support, and mental health therapy for adults and teens across Colorado. Telehealth with Kelly Faus, MA, LPC, LAC.',
   body: `
   <section class="hero">
     <div class="wrap hero__inner">
@@ -369,7 +386,7 @@ ${contactForm('Start your journey today', 'Tell me a little about what you&rsquo
 pages.push({
   file: 'about.html',
   title: 'About Kelly Faus, MA, LPC, LAC | Cool Bird Counseling',
-  description: 'Kelly Faus is a Licensed Professional Counselor and Licensed Addiction Counselor in Colorado, trained at Adams State University and the University of Northern Colorado.',
+  description: 'Kelly Faus is a Licensed Professional Counselor and Licensed Addiction Counselor in Colorado, trained at Adams State and the University of Northern Colorado.',
   body: `
   <section class="page-head wrap">
     <p class="eyebrow">About</p>
@@ -1256,8 +1273,16 @@ function parsePosts() {
     fm.slug = fm.slug || f.replace(/\.md$/, '');
     fm.file = 'blog-' + fm.slug + '.html';
     fm.md = body.trim();
+    // Tina writes `published: true|false`. Anything without the field is
+    // treated as published so existing posts keep working.
+    fm.published = String(fm.published === undefined ? 'true' : fm.published) === 'true';
     return fm;
-  }).sort((a, b) => (a.date < b.date ? 1 : -1));
+  })
+  .filter(pg => {
+    if (!pg.published) console.log('skipping unpublished post: ' + pg.slug);
+    return pg.published;
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 /* minimal markdown → HTML: headings, bold, italic, links, paragraphs */
@@ -1539,6 +1564,7 @@ ${pages.map(pg => `  <url>
 fs.writeFileSync(path.join(OUT, 'robots.txt'),
 `User-agent: *
 Allow: /
+Disallow: /admin/
 
 # AI crawlers are welcome — see /llms.txt for a structured summary
 User-agent: GPTBot
@@ -1644,6 +1670,40 @@ fs.writeFileSync(path.join(OUT, '_headers'),
   Cache-Control: public, max-age=3600
 /llms.txt
   Cache-Control: public, max-age=3600
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+/site.webmanifest
+  Cache-Control: public, max-age=604800
+  Content-Type: application/manifest+json
+
+# The CMS is Kelly's, not the public's — keep it out of search results.
+/admin/*
+  X-Robots-Tag: noindex, nofollow
 `);
 
-console.log('wrote sitemap.xml, robots.txt, llms.txt, _redirects, _headers, 404.html');
+/* Unpublishing must actually remove the page. Without this the previous
+   build's blog-<slug>.html stays on disk, gets deployed, and remains a live
+   orphan URL that search engines keep serving. */
+const livePostFiles = new Set(POSTS.map(pg => pg.file));
+fs.readdirSync(OUT)
+  .filter(f => /^blog-.+\.html$/.test(f) && !livePostFiles.has(f))
+  .forEach(f => { fs.unlinkSync(path.join(OUT, f)); console.log('removed unpublished page: ' + f); });
+
+fs.writeFileSync(path.join(OUT, 'site.webmanifest'), JSON.stringify({
+  name: 'Cool Bird Counseling',
+  short_name: 'Cool Bird',
+  description: 'Addiction, grief, and mental health counseling by telehealth throughout Colorado.',
+  start_url: '/',
+  scope: '/',
+  display: 'browser',
+  background_color: '#f8f7f6',
+  theme_color: '#2f4038',
+  icons: [
+    { src: '/assets/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+    { src: '/assets/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+    { src: '/assets/favicon.svg', sizes: 'any', type: 'image/svg+xml' },
+  ],
+}, null, 2) + '\n');
+
+console.log('wrote sitemap.xml, robots.txt, llms.txt, site.webmanifest, _redirects, _headers, 404.html');

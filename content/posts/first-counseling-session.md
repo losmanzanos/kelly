@@ -4,6 +4,7 @@ slug: "first-counseling-session"
 hero: "trail"
 heroAlt: "A trail winding through the Colorado high country"
 date: "2026-08-12"
+published: true
 description: "The first session is mostly orientation, not excavation. Here's what to expect, what you don't need to prepare, and how to tell whether a counselor is a fit."
 tags: ["Getting started", "Therapy"]
 ---

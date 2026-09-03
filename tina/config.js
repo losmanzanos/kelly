@@ -23,6 +23,12 @@ export default defineConfig({
         { type: 'datetime', name: 'date', label: 'Date', required: true },
         { type: 'string', name: 'description', label: 'Meta description', ui: { component: 'textarea' } },
         { type: 'string', name: 'tags', label: 'Tags', list: true },
+        {
+          type: 'boolean', name: 'published', label: 'Published',
+          description:
+            'Off keeps the post out of the blog index, the sitemap and search ' +
+            'results. The page itself stops being generated on the next build.',
+        },
         { type: 'rich-text', name: 'body', label: 'Body', isBody: true },
       ],
     }],

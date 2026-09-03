@@ -17,3 +17,13 @@
   Cache-Control: public, max-age=3600
 /llms.txt
   Cache-Control: public, max-age=3600
+
+/favicon.ico
+  Cache-Control: public, max-age=604800
+/site.webmanifest
+  Cache-Control: public, max-age=604800
+  Content-Type: application/manifest+json
+
+# The CMS is Kelly's, not the public's — keep it out of search results.
+/admin/*
+  X-Robots-Tag: noindex, nofollow

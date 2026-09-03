@@ -4,7 +4,8 @@ slug: "harm-reduction-or-abstinence"
 hero: "aspen"
 heroAlt: "Colorado aspens turning gold in autumn"
 date: "2026-08-20"
-description: "You don't need to have settled the abstinence question to begin counseling. Here's how harm reduction and abstinence-based approaches actually differ, and why the choice isn't a gate."
+published: true
+description: "You don't need to have settled the abstinence question to start counseling. How harm reduction and abstinence-based approaches differ, and why it isn't a gate."
 tags: ["Addiction", "Harm reduction"]
 ---
 

@@ -4,9 +4,15 @@
   "private": true,
   "description": "Cool Bird Counseling LLC \u2014 static site",
   "scripts": {
-    "build": "node build.js",
+    "build": "tinacms build && node build.js",
     "dev": "npx wrangler pages dev . --compatibility-date=2026-01-01",
-    "tina": "npx tinacms dev -c \"node build.js\""
+    "tina": "npx tinacms dev -c \"node build.js\"",
+    "build:site": "node build.js",
+    "tina:lock": "tinacms build --skip-search-index"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@tinacms/cli": "^2.6.1",
+    "tinacms": "^3.12.1"
+  }
 }
