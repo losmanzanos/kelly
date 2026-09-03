@@ -25,12 +25,24 @@ Posts are markdown in `content/posts/` with frontmatter. `tina/config.js` is
 configured against that collection. To enable editing:
 
 ```
-npx @tinacms/cli@latest init      # adds TINA_CLIENT_ID / TINA_TOKEN
-npx tinacms dev -c "node build.js"
+npm install
+npx tinacms build        # reads .env, writes tina-lock.json + admin/
+git add tina-lock.json && git commit -m "Tina lock" && git push
 ```
 
+`.env` (gitignored) holds `TINA_CLIENT_ID` and `TINA_TOKEN`. `tina-lock.json`
+**must** be committed — TinaCloud reads it from the repo to index content.
+`admin/` is gitignored because the deploy regenerates it.
+
 Kelly edits at `/admin`, Tina commits markdown, `build.js` regenerates the blog
-index and post pages. Adding a `.md` file is all it takes to publish a post.
+index and post pages.
+
+**Publish / unpublish.** Each post carries a `published` boolean, exposed in
+Tina as a toggle. Turning it off drops the post from the blog index and the
+sitemap *and deletes the generated `blog-<slug>.html`* — without that last part
+the stale page stays deployed as a live orphan URL. Posts with no `published`
+field are treated as published. `/admin` is `noindex` in both `robots.txt` and
+`_headers`.
 
 ## SEO / schema
 
@@ -75,14 +87,40 @@ Under 820px the hero claims `calc(100svh - 5rem - 1px)` (the header's exact
 height) and scales the couch to `140% auto` so it anchors the fold flush to the
 bottom with no gap.
 
+## Contact form
+
+`functions/api/contact.js` is a Cloudflare Pages Function posting to Resend.
+Env vars (Pages → Settings → Variables):
+
+| Var | Value |
+|---|---|
+| `RESEND_API_KEY` | secret |
+| `FROM_EMAIL` | `website@notify.coolbirdcounseling.com` |
+| `TO_EMAIL` | `kelly@coolbirdcounseling.com` |
+| `TURNSTILE_SECRET` | optional; enables spam check when present |
+
+Sending domain is `notify.coolbirdcounseling.com` — a subdomain so its DKIM/SPF
+records can never collide with the Google Workspace records on the apex.
+Verified in Resend. Pages Functions bind env vars **per deployment**, so a
+variable change needs a redeploy to take effect.
+
+## Icons / social
+
+`favicon.ico` (16/32/48), `assets/favicon.svg`, `assets/apple-touch-icon.png`
+(180), `assets/icon-192.png`, `assets/icon-512.png`, `site.webmanifest`.
+Bird mark reversed out of spruce `#2f4038` — solid rather than the translucent
+mint circle, which turns to mush at 16px. `assets/og-card.jpg` is the 1200×630
+share card referenced by `og:image` and `twitter:image` on every page.
+
 ## Open items
 
-- **Contact form** — `action="#"`. Needs Formspree, Cloudflare, or EmailJS.
-- **Documents** — HIPAA notice and ROI are live. Safety Plan generator is built
-  in-page; swap in Kelly's own HTML if he prefers it.
+- **Tina `/admin`** — needs `TINA_CLIENT_ID` + `TINA_TOKEN` in Pages, the build
+  command switched to `npm run build:cms`, and `tina-lock.json` committed.
+  See "Blog / TinaCMS" above.
 - **Supervision rate** — "Rate on request" until Kelly sets a number.
-- **Analytics / Search Console** — IDs to be added at launch.
-- **DNS** — point A/CNAME at the host, leave MX untouched.
+- **Analytics / Search Console** — set `GA_ID` as a build variable to switch
+  analytics on. Verify Search Console with the HTML-file method, not DNS, so it
+  needs nothing from Kelly.
 
 ## QA
 
