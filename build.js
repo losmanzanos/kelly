@@ -887,8 +887,9 @@ pages.push({
             <textarea name="crisis" rows="3" placeholder="Local walk-in center, nearest emergency room, anyone else"></textarea></label>
 
           <div class="sp__actions">
-            <button type="button" class="btn btn--solid" onclick="buildPlan()">Create my plan</button>
-            <button type="button" class="btn btn--outline" onclick="buildPlan(); window.print();">Print / Save as PDF</button>
+            <button type="button" class="btn btn--solid" onclick="buildPlan(true)">Create my plan</button>
+            <button type="button" class="btn btn--outline" id="printBtn" disabled
+                    onclick="window.print();">Print / Save as PDF</button>
           </div>
         </form>
       </div>
@@ -912,7 +913,6 @@ pages.push({
                 border:1px solid var(--rule); border-radius:0; padding:.75rem .9rem;
                 font-family:var(--serif); font-size:1rem; color:var(--ink); resize:vertical; }
     .sp textarea:focus, .sp input:focus { outline:none; border-color:var(--sage); background:#fff; }
-    .sp__actions { display:flex; flex-wrap:wrap; gap:.75rem; }
     .plan { margin-top:2rem; }
     .plan__title { font-style:italic; text-align:center; }
     .plan h3 { font-family:var(--sans); font-size:.75rem; letter-spacing:.16em; text-transform:uppercase;
@@ -935,7 +935,7 @@ pages.push({
   </style>
 
   <script>
-    function buildPlan() {
+    function buildPlan(scroll) {
       var f = document.getElementById('sp');
       var map = [
         ['warning', 'Warning signs'],
@@ -953,12 +953,27 @@ pages.push({
         var esc = v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         html += '<h3>' + pair[1] + '</h3><p class="v">' + esc + '</p>';
       });
-      if (!html) { html = '<p class="v">Fill in a section above, then select &ldquo;Create my plan&rdquo; again.</p>'; }
+      var hasContent = !!html;
+      if (!hasContent) { html = '<p class="v">Fill in a section above, then select &ldquo;Create my plan&rdquo; again.</p>'; }
       document.getElementById('planBody').innerHTML = html;
       var plan = document.getElementById('plan');
       plan.hidden = false;
-      plan.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Nothing to print until at least one section has been filled in.
+      document.getElementById('printBtn').disabled = !hasContent;
+      // Only the explicit button press scrolls; live rebuilds while typing
+      // must not yank the page around under the cursor.
+      if (scroll) { plan.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      return hasContent;
     }
+
+    // Editing a field after building invalidates what is on screen, so rebuild
+    // quietly — this also re-gates the print button if everything is cleared.
+    document.addEventListener('DOMContentLoaded', function () {
+      var f = document.getElementById('sp');
+      f.addEventListener('input', function () {
+        if (!document.getElementById('plan').hidden) { buildPlan(); }
+      });
+    });
     var planHome = null;
     window.addEventListener('beforeprint', function () {
       var plan = document.getElementById('plan');

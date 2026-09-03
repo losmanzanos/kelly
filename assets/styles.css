@@ -155,6 +155,12 @@ p:last-child { margin-bottom: 0; }
 .btn--terracotta { background: var(--terracotta); color: #fff; padding-inline: 3rem; }
 .btn--terracotta:hover { background: #96491f; color: #fff; }
 
+/* A disabled action reads as unavailable rather than broken: it keeps its
+   shape, drops its contrast, and stops responding to hover. */
+.btn[disabled] {
+  opacity: 0.42; cursor: not-allowed; pointer-events: none;
+}
+
 /* Safety Plan action row. The two buttons were bare inline-blocks, so each
    sized to its own label and they stacked with a ragged left edge.
    inline-grid with 1fr columns sizes both to the wider label — equal width
