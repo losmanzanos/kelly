@@ -110,6 +110,12 @@ export async function onRequestPost({ request, env }) {
     timeZone: 'America/Denver', dateStyle: 'full', timeStyle: 'short',
   }) + ' MT';
 
+  // Accept either a bare address or a full "Name <addr>" in FROM_EMAIL, so the
+  // env var stays simple enough to paste into a .env import without quoting.
+  const from = /</.test(env.FROM_EMAIL)
+    ? env.FROM_EMAIL
+    : `Cool Bird Counseling <${env.FROM_EMAIL}>`;
+
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -117,7 +123,7 @@ export async function onRequestPost({ request, env }) {
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      from: env.FROM_EMAIL,
+      from,
       to: [env.TO_EMAIL],
       reply_to: email,
       subject: `New inquiry from ${name}`,
