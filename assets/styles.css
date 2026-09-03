@@ -305,6 +305,24 @@ p:last-child { margin-bottom: 0; }
 /* ---------- responsive -------------------------------------------------- */
 
 @media (max-width: 820px) {
+  /* Fill the viewport so the couch anchors the fold with no gap beneath it.
+     svh accounts for mobile browser chrome; vh is the fallback. */
+  .hero {
+    /* Header is a deterministic 5rem + 1px border, so the hero can claim
+       exactly the rest of the fold. svh accounts for mobile browser chrome;
+       vh is the fallback for older engines. */
+    min-height: calc(100vh - 5rem - 1px);
+    min-height: calc(100svh - 5rem - 1px);
+    padding-block: clamp(2rem, 7vw, 3.25rem) 42vw;
+    display: flex;
+    align-items: center;
+    /* Oversized so the couch reads as an anchor rather than a thin ribbon.
+       The arms crop; the seat stays centred. */
+    background-size: 140% auto;
+    background-position: center bottom;
+  }
+  .hero__inner { width: 100%; }
+
   .nav-toggle__btn { display: block; }
   .nav {
     position: absolute; left: 0; right: 0; top: 100%;
@@ -366,8 +384,9 @@ p:last-child { margin-bottom: 0; }
 }
 .photostrip::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(248,247,246,.35) 0%, rgba(248,247,246,0) 35%,
-                                       rgba(248,247,246,0) 65%, rgba(248,247,246,.35) 100%);
+  /* Top fade only. A bottom cream fade sat against the dark footer and read as a
+     separate pale strip. */
+  background: linear-gradient(180deg, rgba(248,247,246,.32) 0%, rgba(248,247,246,0) 38%);
 }
 .photostrip--trail  { background-image: url("co-trail.webp"); }
 .photostrip--basin  { background-image: url("co-basin.webp"); }
@@ -382,8 +401,7 @@ p:last-child { margin-bottom: 0; }
 }
 .banner::after {
   content: ""; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(248,247,246,.30) 0%, rgba(248,247,246,0) 40%,
-                                       rgba(248,247,246,0) 60%, rgba(248,247,246,.30) 100%);
+  background: linear-gradient(180deg, rgba(248,247,246,.30) 0%, rgba(248,247,246,0) 40%);
 }
 .banner--pines  { background-image: url("co-pines.webp"); }
 .banner--peaks  { background-image: url("co-peaks.webp"); }

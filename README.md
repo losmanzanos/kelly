@@ -71,6 +71,9 @@ JavaScript.
 
 Hero background is `#d5d8d2`, sampled from the couch photo's wall so the join is
 invisible; the couch starts 32.6% down the image, hence `padding-bottom: 27vw`.
+Under 820px the hero claims `calc(100svh - 5rem - 1px)` (the header's exact
+height) and scales the couch to `140% auto` so it anchors the fold flush to the
+bottom with no gap.
 
 ## Open items
 
