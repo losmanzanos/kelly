@@ -37,8 +37,13 @@ function template({ name, email, phone, message, when }) {
   <tr><td align="center">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid rgba(97,112,97,.35)">
       <tr><td style="background:#2f4038;padding:22px 28px">
-        <div style="font:600 12px/1.4 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#a8c4b8">Cool Bird Counseling</div>
-        <div style="font:italic 600 22px/1.3 Georgia,serif;color:#ffffff;margin-top:6px">New website inquiry</div>
+        <!-- Retina PNG on a matching dark ground. If the client blocks remote
+             images the alt text still reads white on green, so the header never
+             looks broken. -->
+        <img src="https://www.coolbirdcounseling.com/assets/cbc-logo-email.png"
+             width="166" height="70" alt="Cool Bird Counseling"
+             style="display:block;border:0;outline:none;text-decoration:none;font:600 16px/1.4 Arial,sans-serif;color:#ffffff">
+        <div style="font:italic 600 22px/1.3 Georgia,serif;color:#ffffff;margin-top:10px">New website inquiry</div>
       </td></tr>
       <tr><td style="padding:28px">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
