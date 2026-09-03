@@ -7,8 +7,8 @@
     "build": "node build.js",
     "build:cms": "tinacms build && node build.js",
     "dev": "npx wrangler pages dev . --compatibility-date=2026-01-01",
-    "tina": "npx tinacms dev -c \"node build.js\"",
-    "tina:lock": "tinacms build --skip-search-index"
+    "tina": "tinacms dev -c \"node build.js && npx --yes serve . -l 3000\"",
+    "tina:lock": "tinacms build"
   },
   "license": "UNLICENSED",
   "devDependencies": {
