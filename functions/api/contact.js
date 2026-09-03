@@ -40,7 +40,7 @@ function template({ name, email, phone, message, when }) {
         <!-- Retina PNG on a matching dark ground. If the client blocks remote
              images the alt text still reads white on green, so the header never
              looks broken. -->
-        <img src="https://www.coolbirdcounseling.com/assets/cbc-logo-email.png"
+        <img src="https://coolbirdcounseling.pages.dev/assets/cbc-logo-email.png"
              width="166" height="70" alt="Cool Bird Counseling"
              style="display:block;border:0;outline:none;text-decoration:none;font:600 16px/1.4 Arial,sans-serif;color:#ffffff">
         <div style="font:italic 600 22px/1.3 Georgia,serif;color:#ffffff;margin-top:10px">New website inquiry</div>
