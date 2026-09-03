@@ -1263,16 +1263,35 @@ function parsePosts() {
     const raw = fs.readFileSync(path.join(dir, f), 'utf8');
     const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
     const fm = {}, meta = m ? m[1] : '', body = m ? m[2] : raw;
-    meta.split('\n').forEach(line => {
-      const kv = line.match(/^(\w+):\s*(.*)$/);
-      if (!kv) return;
-      let v = kv[2].trim().replace(/^"(.*)"$/, '$1');
-      if (v.startsWith('[')) v = v.slice(1, -1).split(',').map(x => x.trim().replace(/^"(.*)"$/, '$1'));
-      fm[kv[1]] = v;
-    });
+    /* Frontmatter is written by two different hands: by us, and by TinaCMS
+       when Kelly saves. Tina emits YAML block lists and full ISO datetimes,
+       so both shapes have to parse or her edits silently drop fields. */
+    const unquote = t => t.trim().replace(/^['"](.*)['"]$/, '$1');
+    const lines = meta.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      const kv = lines[i].match(/^(\w+):\s*(.*)$/);
+      if (!kv) continue;
+      const key = kv[1];
+      let v = kv[2].trim();
+      if (v === '') {
+        // YAML block list:  tags:\n  - recovery\n  - grief
+        const items = [];
+        while (i + 1 < lines.length && /^\s*-\s+/.test(lines[i + 1])) {
+          items.push(unquote(lines[++i].replace(/^\s*-\s+/, '')));
+        }
+        fm[key] = items.length ? items : '';
+      } else if (v.startsWith('[')) {
+        fm[key] = v.slice(1, -1).split(',').map(unquote).filter(Boolean);
+      } else {
+        fm[key] = unquote(v);
+      }
+    }
     fm.slug = fm.slug || f.replace(/\.md$/, '');
     fm.file = 'blog-' + fm.slug + '.html';
     fm.md = body.trim();
+    // Tina's datetime field stores a full ISO string; our date helpers and the
+    // BlogPosting schema both want a plain YYYY-MM-DD.
+    fm.date = String(fm.date || '').slice(0, 10);
     // Tina writes `published: true|false`. Anything without the field is
     // treated as published so existing posts keep working.
     fm.published = String(fm.published === undefined ? 'true' : fm.published) === 'true';
@@ -1295,10 +1314,28 @@ function mdToHtml(md) {
     .replace(/ — /g, ' &mdash; ');
   return md.split(/\n{2,}/).map(block => {
     const b = block.trim();
+    if (!b) return '';
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(b)) return '<hr>';
+    if (b.startsWith('### ')) return `<h3 style="margin-top:2rem">${inline(b.slice(4))}</h3>`;
     if (b.startsWith('## ')) return `<h2 style="margin-top:2.5rem">${inline(b.slice(3))}</h2>`;
     if (b.startsWith('# ')) return `<h2>${inline(b.slice(2))}</h2>`;
+    if (/^>\s?/.test(b)) {
+      return `<blockquote>${inline(b.split('\n').map(l => l.replace(/^>\s?/, '')).join(' '))}</blockquote>`;
+    }
+    /* Tina's rich-text editor produces real markdown lists. Without these two
+       branches a bulleted list renders as one paragraph full of hyphens. */
+    if (/^[-*+]\s+/.test(b)) {
+      const items = b.split('\n').filter(l => /^\s*[-*+]\s+/.test(l))
+        .map(l => `<li>${inline(l.replace(/^\s*[-*+]\s+/, ''))}</li>`).join('');
+      return `<ul>${items}</ul>`;
+    }
+    if (/^\d+[.)]\s+/.test(b)) {
+      const items = b.split('\n').filter(l => /^\s*\d+[.)]\s+/.test(l))
+        .map(l => `<li>${inline(l.replace(/^\s*\d+[.)]\s+/, ''))}</li>`).join('');
+      return `<ol>${items}</ol>`;
+    }
     return `<p>${inline(b).replace(/\n/g, ' ')}</p>`;
-  }).join('\n      ');
+  }).filter(Boolean).join('\n      ');
 }
 
 const POSTS = parsePosts();

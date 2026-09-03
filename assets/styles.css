@@ -183,6 +183,28 @@ p:last-child { margin-bottom: 0; }
   .sp__actions .btn { flex: 1 1 100%; min-width: 0; white-space: normal; }
 }
 
+/* ---------- blog prose -------------------------------------------------
+   Everything Kelly can produce from the Tina rich-text editor gets a style
+   here, so a bulleted list or pull quote she writes looks designed rather
+   than like browser defaults. */
+
+article .wrap.narrow ul,
+article .wrap.narrow ol { margin: 1.25em 0; padding-left: 1.35em; }
+article .wrap.narrow li { margin-bottom: 0.5em; }
+article .wrap.narrow li::marker { color: var(--sage); }
+
+article .wrap.narrow blockquote {
+  margin: 2em 0; padding: 0.25rem 0 0.25rem 1.5rem;
+  border-left: 2px solid var(--mint);
+  font-style: italic; font-size: 1.0625rem; color: var(--ink);
+}
+article .wrap.narrow blockquote p:last-child { margin-bottom: 0; }
+
+article .wrap.narrow hr {
+  border: 0; border-top: 1px solid var(--rule);
+  margin: 2.75em auto; width: 40%;
+}
+
 /* ---------- hero -------------------------------------------------------- */
 
 /* The couch photo sits flush to the bottom of the hero at full width, exactly as
