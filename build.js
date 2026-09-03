@@ -133,12 +133,12 @@ const page = ({ file, title, description, body, schema, banner, bannerAlt }) => 
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
 <meta property="og:type" content="website">
-<meta property="og:url" content="${SITE}/${file === 'index.html' ? '' : file}">
+<meta property="og:url" content="${SITE}/${file === 'index.html' ? '' : file.replace(/\.html$/, '')}">
 <meta property="og:site_name" content="Cool Bird Counseling">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="geo.region" content="US-CO">
-<link rel="canonical" href="${SITE}/${file === 'index.html' ? '' : file}">
+<link rel="canonical" href="${SITE}/${file === 'index.html' ? '' : file.replace(/\.html$/, '')}">
 <script type="application/ld+json">${ld(schema)}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1488,14 +1488,22 @@ pages.push({
 
 /* ---------- write -------------------------------------------------------- */
 
+/* Cloudflare Pages serves clean URLs natively (/about, not /about.html) and
+   308-redirects the .html form. Emitting clean hrefs avoids a redirect hop on
+   every click and keeps canonicals matching the real URL. */
+const cleanLinks = (html) => html
+  .replace(/href="index\.html"/g, 'href="/"')
+  .replace(/href="([a-z0-9-]+)\.html(#[^"]*)?"/g, (m, n, hash) => `href="/${n}${hash || ''}"`);
+
 for (const p of pages) {
-  fs.writeFileSync(path.join(OUT, p.file), page(p));
+  fs.writeFileSync(path.join(OUT, p.file), cleanLinks(page(p)));
   console.log('wrote', p.file);
 }
 
 /* ================= sitemap / robots / llms / redirects ================== */
 const today = new Date().toISOString().slice(0, 10);
-const urlOf = f => SITE + '/' + (f === 'index.html' ? '' : f);
+const clean = f => (f === 'index.html' ? '' : f.replace(/\.html$/, ''));
+const urlOf = f => SITE + '/' + clean(f);
 const priority = f => f === 'index.html' ? '1.0'
   : /^(services|contact|about)\.html$/.test(f) ? '0.9'
   : /^service-/.test(f) ? '0.8'
@@ -1567,29 +1575,13 @@ This site is not a crisis service.
 /* Cloudflare Pages redirects — every URL from the old Google Sites build.
    Switch on at cutover; no existing link 404s. */
 fs.writeFileSync(path.join(OUT, '_redirects'),
-`# old Google Sites paths -> new pages (301, permanent)
-/home                 /                                        301
-/about                /about.html                              301
-/services             /services.html                           301
-/resources            /resources.html                          301
-/documents            /documents.html                          301
-/safety-plan          /safety-plan.html                        301
-
-# extensionless convenience URLs
-/contact              /contact.html                            301
-/faq                  /faq.html                                301
-/blog                 /blog.html                               301
-/privacy-policy       /privacy-policy.html                     301
-/terms                /terms.html                              301
-/individual-psychotherapy  /service-individual-psychotherapy.html  301
-/assessment           /service-assessment.html                 301
-/supervision          /service-clinical-supervision.html       301
-
-# anything else falls back to the custom 404
-/*                    /404.html                                404
+`# Old Google Sites URL -> new home. Everything else is already a clean URL on
+# Cloudflare Pages (/about serves about.html automatically), and 404.html at the
+# root is picked up natively — declaring either here causes a redirect loop.
+/home    /    301
 `);
 
-fs.writeFileSync(path.join(OUT, '404.html'), page({
+fs.writeFileSync(path.join(OUT, '404.html'), cleanLinks(page({
   file: '404.html',
   title: 'Page not found | Cool Bird Counseling',
   description: 'That page has moved or no longer exists. Here is where to find what you were looking for.',
@@ -1616,7 +1608,7 @@ fs.writeFileSync(path.join(OUT, '404.html'), page({
       </div>
     </div>
   </section>`,
-}));
+})));
 fs.writeFileSync(path.join(OUT, '_headers'),
 `/*
   X-Content-Type-Options: nosniff
