@@ -113,14 +113,22 @@
     <div class="wrap center">
       <h2>Still have a question?</h2>
       <p class="narrow">Ask directly. No obligation, no sales pitch.</p>
-      <form class="form" style="margin-top:2.5rem" method="post" action="#" novalidate>
+      <form class="form" id="contactForm" style="margin-top:2.5rem" method="post" action="/api/contact" novalidate>
         <div class="form__row">
-          <input type="text" name="name" placeholder="Name" aria-label="Name" required>
-          <input type="email" name="email" placeholder="Email Address" aria-label="Email address" required>
+          <label class="sr-only" for="cf-name">Name</label>
+          <input id="cf-name" type="text" name="name" placeholder="Name" autocomplete="name" required>
+          <label class="sr-only" for="cf-email">Email address</label>
+          <input id="cf-email" type="email" name="email" placeholder="Email Address" autocomplete="email" required>
         </div>
-        <input type="tel" name="phone" placeholder="Phone (optional)" aria-label="Phone number">
-        <textarea name="message" placeholder="What brings you here? A sentence or two is plenty." aria-label="Message" required></textarea>
-        <button class="btn btn--terracotta" type="submit">Send</button>
+        <label class="sr-only" for="cf-phone">Phone number (optional)</label>
+        <input id="cf-phone" type="tel" name="phone" placeholder="Phone (optional)" autocomplete="tel">
+        <label class="sr-only" for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="What brings you here? A sentence or two is plenty." required></textarea>
+        <div class="hp" aria-hidden="true">
+          <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button class="btn btn--terracotta" type="submit" data-label="Send">Send</button>
+        <p class="form__status" role="status" aria-live="polite"></p>
         <p class="form__note">
           Your privacy and safety are my top concerns. Your information will never be shared or sold.
           Please don't include sensitive clinical details in this form &mdash; we'll cover those securely
@@ -163,5 +171,52 @@
     </p>
   </div>
 </footer>
+<script>
+(function () {
+  var f = document.getElementById('contactForm');
+  if (!f) return;
+  var btn = f.querySelector('button[type=submit]');
+  var status = f.querySelector('.form__status');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.className = 'form__status';
+    status.textContent = '';
+    if (!f.name.value.trim() || !f.email.value.trim() || !f.message.value.trim()) {
+      status.className = 'form__status is-error';
+      status.textContent = 'Please add your name, email, and a short message.';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch(f.action, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(f)))
+    })
+      .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+      .then(function (d) {
+        if (d && d.ok) {
+          f.querySelector('.form__row').style.display = 'none';
+          f.phone.style.display = 'none';
+          f.message.style.display = 'none';
+          f.querySelector('.hp').style.display = 'none';
+          btn.style.display = 'none';
+          status.className = 'form__status is-ok';
+          status.textContent = 'Thank you — your message is on its way. I reply within one business day.';
+        } else {
+          throw new Error((d && d.error) || 'send failed');
+        }
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        btn.textContent = btn.getAttribute('data-label') || 'Send';
+        status.className = 'form__status is-error';
+        status.textContent = (err && err.message && err.message !== 'send failed')
+          ? err.message
+          : 'Something went wrong. Please email kelly@coolbirdcounseling.com directly.';
+      });
+  });
+})();
+</script>
 </body>
 </html>

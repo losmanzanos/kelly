@@ -16,6 +16,18 @@ const mark = (variant) =>
 
 const SITE = 'https://www.coolbirdcounseling.com';
 
+/* Set GA_ID in the Cloudflare Pages build environment to switch analytics on.
+   Absent = no script, no cookie banner needed. */
+const GA_ID = process.env.GA_ID || '';
+const analytics = GA_ID ? `
+<script async src="https://www.googletagmanager.com/gtag/js?id=${GA_ID}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GA_ID}', { anonymize_ip: true });
+</script>` : '';
+
 const NAV = [
   ['index.html',     'Home'],
   ['about.html',     'About'],
@@ -131,7 +143,7 @@ const page = ({ file, title, description, body, schema, banner, bannerAlt }) => 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Brygada+1918:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css">${analytics}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -140,6 +152,53 @@ ${header(file)}
 ${banner ? body.replace('</section>', '</section>\n\n  ' + bannerHtml(banner, bannerAlt)) : body}
 </main>
 ${footer}
+<script>
+(function () {
+  var f = document.getElementById('contactForm');
+  if (!f) return;
+  var btn = f.querySelector('button[type=submit]');
+  var status = f.querySelector('.form__status');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    status.className = 'form__status';
+    status.textContent = '';
+    if (!f.name.value.trim() || !f.email.value.trim() || !f.message.value.trim()) {
+      status.className = 'form__status is-error';
+      status.textContent = 'Please add your name, email, and a short message.';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    fetch(f.action, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(f)))
+    })
+      .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+      .then(function (d) {
+        if (d && d.ok) {
+          f.querySelector('.form__row').style.display = 'none';
+          f.phone.style.display = 'none';
+          f.message.style.display = 'none';
+          f.querySelector('.hp').style.display = 'none';
+          btn.style.display = 'none';
+          status.className = 'form__status is-ok';
+          status.textContent = 'Thank you — your message is on its way. I reply within one business day.';
+        } else {
+          throw new Error((d && d.error) || 'send failed');
+        }
+      })
+      .catch(function (err) {
+        btn.disabled = false;
+        btn.textContent = btn.getAttribute('data-label') || 'Send';
+        status.className = 'form__status is-error';
+        status.textContent = (err && err.message && err.message !== 'send failed')
+          ? err.message
+          : 'Something went wrong. Please email kelly@coolbirdcounseling.com directly.';
+      });
+  });
+})();
+</script>
 </body>
 </html>
 `;
@@ -151,14 +210,22 @@ const contactForm = (heading, blurb) => `
     <div class="wrap center">
       <h2>${heading}</h2>
       <p class="narrow">${blurb}</p>
-      <form class="form" style="margin-top:2.5rem" method="post" action="#" novalidate>
+      <form class="form" id="contactForm" style="margin-top:2.5rem" method="post" action="/api/contact" novalidate>
         <div class="form__row">
-          <input type="text" name="name" placeholder="Name" aria-label="Name" required>
-          <input type="email" name="email" placeholder="Email Address" aria-label="Email address" required>
+          <label class="sr-only" for="cf-name">Name</label>
+          <input id="cf-name" type="text" name="name" placeholder="Name" autocomplete="name" required>
+          <label class="sr-only" for="cf-email">Email address</label>
+          <input id="cf-email" type="email" name="email" placeholder="Email Address" autocomplete="email" required>
         </div>
-        <input type="tel" name="phone" placeholder="Phone (optional)" aria-label="Phone number">
-        <textarea name="message" placeholder="What brings you here? A sentence or two is plenty." aria-label="Message" required></textarea>
-        <button class="btn btn--terracotta" type="submit">Send</button>
+        <label class="sr-only" for="cf-phone">Phone number (optional)</label>
+        <input id="cf-phone" type="tel" name="phone" placeholder="Phone (optional)" autocomplete="tel">
+        <label class="sr-only" for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" placeholder="What brings you here? A sentence or two is plenty." required></textarea>
+        <div class="hp" aria-hidden="true">
+          <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button class="btn btn--terracotta" type="submit" data-label="Send">Send</button>
+        <p class="form__status" role="status" aria-live="polite"></p>
         <p class="form__note">
           Your privacy and safety are my top concerns. Your information will never be shared or sold.
           Please don't include sensitive clinical details in this form &mdash; we'll cover those securely
@@ -1550,4 +1617,26 @@ fs.writeFileSync(path.join(OUT, '404.html'), page({
     </div>
   </section>`,
 }));
-console.log('wrote sitemap.xml, robots.txt, llms.txt, _redirects, 404.html');
+fs.writeFileSync(path.join(OUT, '_headers'),
+`/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+/robots.txt
+  Cache-Control: public, max-age=3600
+/llms.txt
+  Cache-Control: public, max-age=3600
+`);
+
+console.log('wrote sitemap.xml, robots.txt, llms.txt, _redirects, _headers, 404.html');

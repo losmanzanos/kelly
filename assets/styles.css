@@ -441,3 +441,23 @@ p:last-child { margin-bottom: 0; }
 .qa summary:hover { color: var(--sage); }
 .qa summary:focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; }
 .qa p { margin: 0 0 1.25rem; font-size: .9375rem; padding-right: 2rem; }
+
+
+/* ---------- contact form states ----------------------------------------- */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.form__status { margin: 1rem 0 0; font-family: var(--sans); font-size: .9375rem; min-height: 1.4em; }
+.form__status.is-ok {
+  color: var(--spruce); background: rgba(168,196,184,.28);
+  border-left: 3px solid var(--sage); padding: .9rem 1.1rem; text-align: left;
+}
+.form__status.is-error {
+  color: #8c3d16; background: rgba(178,93,45,.08);
+  border-left: 3px solid var(--terracotta); padding: .9rem 1.1rem; text-align: left;
+}
+.form button[disabled] { opacity: .6; cursor: progress; }
