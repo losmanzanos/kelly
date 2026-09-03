@@ -49,7 +49,11 @@ export default defineConfig({
               .replace(/^-+|-+$/g, '')
               .slice(0, 60),
         },
-        router: ({ document }) => `/blog-${document._sys.filename}`,
+        /* No `router` on purpose. A router sends Tina into visual-editing
+           mode, which expects the page to register its form through Tina's
+           React hooks. This site is plain static HTML, so that screen renders
+           "TinaCMS form fields will appear here" and nothing else. Without a
+           router Tina uses its normal form editor, which is what we want. */
         /* New posts start as drafts and dated today. */
         defaultItem: () => ({
           date: new Date().toISOString().slice(0, 10),
