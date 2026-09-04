@@ -1,15 +1,18 @@
+# Pages serves clean URLs (/about, not /about.html), so a /*.html rule
+# matches almost nothing. Every page here was being edge-cached under Pages'
+# defaults, which is why an unpublished post kept serving a stale 200 for
+# hours after the deploy that removed it. Revalidate all HTML; the immutable
+# rule below wins for /assets/* because later matches override earlier ones.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
-
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
 
 /sitemap.xml
   Cache-Control: public, max-age=3600

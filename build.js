@@ -1266,7 +1266,15 @@ function parsePosts() {
     /* Frontmatter is written by two different hands: by us, and by TinaCMS
        when Kelly saves. Tina emits YAML block lists and full ISO datetimes,
        so both shapes have to parse or her edits silently drop fields. */
-    const unquote = t => t.trim().replace(/^['"](.*)['"]$/, '$1');
+    /* YAML scalars: a single-quoted string escapes an apostrophe by doubling
+       it, so Tina writes  'You don''t need...'  and a naive strip of the outer
+       quotes leaves don''t in the meta description. */
+    const unquote = (t) => {
+      const v = t.trim();
+      if (/^'.*'$/s.test(v)) return v.slice(1, -1).replace(/''/g, "'");
+      if (/^".*"$/s.test(v)) return v.slice(1, -1).replace(/\\"/g, '"');
+      return v;
+    };
     const lines = meta.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const kv = lines[i].match(/^(\w+):\s*(.*)$/);
@@ -1688,18 +1696,21 @@ fs.writeFileSync(path.join(OUT, '404.html'), cleanLinks(page({
   </section>`,
 })));
 fs.writeFileSync(path.join(OUT, '_headers'),
-`/*
+`# Pages serves clean URLs (/about, not /about.html), so a /*.html rule
+# matches almost nothing. Every page here was being edge-cached under Pages'
+# defaults, which is why an unpublished post kept serving a stale 200 for
+# hours after the deploy that removed it. Revalidate all HTML; the immutable
+# rule below wins for /assets/* because later matches override earlier ones.
+/*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
-
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
 
 /sitemap.xml
   Cache-Control: public, max-age=3600
