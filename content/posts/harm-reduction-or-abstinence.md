@@ -1,12 +1,14 @@
 ---
-title: "Harm Reduction or Abstinence? You Can Decide Later"
-slug: "harm-reduction-or-abstinence"
-hero: "aspen"
-heroAlt: "Colorado aspens turning gold in autumn"
-date: "2026-08-20"
-published: true
-description: "You don't need to have settled the abstinence question to start counseling. How harm reduction and abstinence-based approaches differ, and why it isn't a gate."
-tags: ["Addiction", "Harm reduction"]
+slug: harm-reduction-or-abstinence
+title: Harm Reduction or Abstinence? You Can Decide Later
+published: false
+date: 2026-08-20T00:00:00.000Z
+description: 'You don''t need to have settled the abstinence question to start counseling. How harm reduction and abstinence-based approaches differ, and why it isn''t a gate.'
+hero: aspen
+heroAlt: Colorado aspens turning gold in autumn
+tags:
+  - Addiction
+  - Harm reduction
 ---
 
 A lot of people put off calling a counselor because they think there's a price of admission: you have to already want to quit.
