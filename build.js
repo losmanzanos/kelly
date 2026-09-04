@@ -25,7 +25,12 @@ const analytics = GA_ID ? `
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', '${GA_ID}', { anonymize_ip: true });
+  /* GA4 discards IP addresses on its own, so anonymize_ip is a no-op here and
+     is left out. These two are not defaults and matter for a health practice:
+     no Google Signals cross-device/demographic data, no ad personalisation. */
+  gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied',
+                               ad_personalization: 'denied' });
+  gtag('config', '${GA_ID}', { allow_google_signals: false, allow_ad_personalization_signals: false });
 </script>` : '';
 
 const NAV = [
@@ -1450,9 +1455,13 @@ pages.push({
         rented, or shared for marketing, ever.
       </p>
       <p>
-        The site uses privacy-respecting analytics to understand which pages people find useful.
-        This records aggregate information such as page views, approximate region, and referring
-        site. It does not identify you personally, and it is not tied to any clinical record.
+        The site uses Google Analytics to understand which pages people find useful. It records
+        aggregate information such as page views, approximate region, and referring site, and it
+        sets a cookie in your browser to recognise repeat visits. Google Analytics does not store
+        IP addresses, and this site runs it without advertising, remarketing, or demographic
+        features enabled. Nothing it records identifies you personally or is tied to any clinical
+        record. Browsers set to &ldquo;Do Not Track,&rdquo; and most ad or privacy blockers, will
+        stop it collecting anything at all.
       </p>
 
       <h2>What this site does not collect</h2>
